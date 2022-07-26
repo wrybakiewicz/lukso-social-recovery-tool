@@ -32,10 +32,16 @@ export default function App() {
         console.log("Deploying social recovery")
         const contractFactory = ContractFactory.fromSolidity(LSP11BasicSocialRecoveryInit, signer)
         const contract = await contractFactory.deploy()
+        const address = await signer.getAddress()
+        await contract.initialize(address)
+        await contract.setThreshold(1)
 
         setContract(contract)
 
         console.log(contract)
+
+        const threshold = await contract.getGuardiansThreshold()
+        console.log(threshold)
     }
 
     const addGuardian = async () => {
