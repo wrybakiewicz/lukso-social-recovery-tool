@@ -1,0 +1,19 @@
+{
+  "name": "get recovery contract address for address",
+  "version": "1.0.0",
+  "description": "get recovery contract address for address",
+  "main": "index.js",
+  "author": "SAM CLI",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "pg": "^8.7.3"
+  },
+  "scripts": {
+    "test": "mocha tests/unit/"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^9.1.4"
+  }
+}
