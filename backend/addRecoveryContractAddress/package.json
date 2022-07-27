@@ -1,13 +1,14 @@
 {
-  "name": "getRecoveryContractAddressForAddress",
+  "name": "addRecoveryContractAddress",
   "version": "1.0.0",
-  "description": "get recovery contract address for address",
+  "description": "add recovery contract address",
   "main": "index.js",
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "ethers": "^5.6.9"
   },
   "scripts": {
     "test": "mocha tests/unit/"
