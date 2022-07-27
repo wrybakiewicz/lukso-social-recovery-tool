@@ -75,7 +75,8 @@ exports.handler = async (event, context) => {
     try {
         console.log("Getting recovery contract address for address")
         console.log(event)
-        const txHash = event.txHash
+        const body = JSON.parse(event.body)
+        const txHash = body.txHash
         console.log("TxHash: " + txHash)
 
         const {contractAddress, ownerAddress} = await getRecoveryContractAddressWithOwnerAddress(txHash)
