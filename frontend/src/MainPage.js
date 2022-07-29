@@ -20,6 +20,7 @@ const YouAsAGuardianLink = styled(Link)`
 const ViewRecoveryLink = YouAsAGuardianLink;
 
 export default function MainPage() {
+
     return <div className={"MainPage"}>
         <Header />
         <div className={"view-recovery"}>

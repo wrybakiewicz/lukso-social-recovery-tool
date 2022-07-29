@@ -7,3 +7,52 @@
 #root {
     height: 100%;
 }
+
+.left {
+    width: 50%;
+    height: 35vh;
+}
+
+.right {
+    width: 50%;
+    height: 35vh;
+}
+
+.centered-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.view-recovery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 150%;
+    height: 30vh;
+}
+
+.view-recovery-width {
+    width: 30% !important;
+}
+
+.btn-outline-primary {
+    background-color: white !important;
+    color: #FC766AFF !important;
+}
+
+.btn-primary {
+    background-color: white !important;
+    color: #5B84B1FF !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:active, .btn-outline-primary:visited {
+    background-color: #D3D3D3 !important;
+    color: black !important;
+}
+
+.btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #D3D3D3 !important;
+    color: black !important;
+}
