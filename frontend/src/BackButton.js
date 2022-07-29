@@ -8,10 +8,10 @@ const BackLink = styled(Link)`
     color: #FC766AFF !important;
 `;
 
-export default function BackButton() {
-    return <Button variant="primary" id="button-back" className={"button-back"}>
-        <BackLink to="/">
+export default function BackButton(color) {
+    return <BackLink to="/">
+        <Button variant="primary" id="button-back" className={"button-back"}>
             <i className="fa fa-chevron-left"></i> Back
-        </BackLink>
-    </Button>
+        </Button>
+    </BackLink>
 }

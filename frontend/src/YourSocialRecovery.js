@@ -5,6 +5,6 @@ import BackButton from "./BackButton";
 export default function YourSocialRecovery() {
     return <div className={"YourSocialRecovery"}>
         <Header/>
-        <BackButton/>
+        <BackButton color={"left-color"}/>
     </div>
 }

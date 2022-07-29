@@ -22,7 +22,7 @@ const ViewRecoveryLink = YouAsAGuardianLink;
 export default function MainPage() {
 
     return <div className={"MainPage"}>
-        <Header />
+        <Header/>
         <div className={"view-recovery"}>
             <InputGroup className="mb-3 view-recovery-width">
                 <Form.Control
@@ -36,10 +36,18 @@ export default function MainPage() {
             </InputGroup>
         </div>
         <div className={"left centered-button"}>
-            <Button variant="outline-primary btn-lg"><YourSocialRecoveryLink to="/your-social-recovery">Your Social Recovery</YourSocialRecoveryLink></Button>{' '}
+            <YourSocialRecoveryLink to="/your-social-recovery">
+                <Button variant="outline-primary btn-lg">
+                    Your Social Recovery
+                </Button>{' '}
+            </YourSocialRecoveryLink>
         </div>
         <div className={"right centered-button"}>
-            <Button variant="primary btn-lg"><YouAsAGuardianLink to="/about2">You as a Guardian</YouAsAGuardianLink></Button>{' '}
+            <YouAsAGuardianLink to="/about2">
+                <Button variant="primary btn-lg">
+                    You as a Guardian
+                </Button>{' '}
+            </YouAsAGuardianLink>
         </div>
     </div>
 }
