@@ -28,7 +28,7 @@ export default function DeployContract({signer}) {
 
     const addSocialRecoveryContract = (hash) => {
         const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/addrecoverycontractaddress`
-        axios.post(url, {txHash: "0x50977eacc421d5f7b27b5dfc39854ffb8c12286ba49fb2e959b345b3c8f302fa"})
+        axios.post(url, {txHash: hash})
             .then((response) => {
                 console.log("Successfully added social recovery contract")
             })
