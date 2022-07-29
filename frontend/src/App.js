@@ -4,7 +4,9 @@ import LSP11BasicSocialRecovery
     from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
 import MainPage from "./MainPage";
 import {Route, Routes} from "react-router";
-import YourSocialRecovery from "./YourSocialRecovery";
+import Guardians from "./Guardians";
+import Threshold from "./Threshold";
+import Secret from "./Secret";
 
 export default function App() {
 
@@ -84,7 +86,9 @@ export default function App() {
 
 
     return <Routes>
-        <Route path="/your-social-recovery" element={<YourSocialRecovery/>} />
+        <Route path="/your-social-recovery/guardians" element={<Guardians />} />
+        <Route path="/your-social-recovery/secret" element={<Secret />} />
+        <Route path="/your-social-recovery/threshold" element={<Threshold />} />
         <Route path="*" element={<MainPage/>}/>
     </Routes>
     // <div>

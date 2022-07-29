@@ -36,7 +36,7 @@ export default function MainPage() {
             </InputGroup>
         </div>
         <div className={"left centered-button"}>
-            <YourSocialRecoveryLink to="/your-social-recovery">
+            <YourSocialRecoveryLink to="/your-social-recovery/guardians">
                 <Button variant="outline-primary btn-lg">
                     Your Social Recovery
                 </Button>{' '}
