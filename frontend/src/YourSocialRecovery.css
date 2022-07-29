@@ -3,3 +3,16 @@
     width: 100%;
     background-color: #FC766AFF;
 }
+
+.navbar-width {
+    width: 40% !important;
+    display: inline-flex !important;
+    margin-left: 20%;
+    background-color: white;
+    padding: 5px;
+}
+
+.navbar-padding {
+    padding-left: 10px;
+    padding-right: 10px;
+}
