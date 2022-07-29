@@ -4,9 +4,9 @@ import axios from "axios";
 import LSP11BasicSocialRecovery
     from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
 import './App.css'
-import Button from 'react-bootstrap/Button';
-import {InputGroup} from "react-bootstrap";
-import Form from 'react-bootstrap/Form';
+import MainPage from "./MainPage";
+import {Route, Routes} from "react-router";
+import YourSocialRecovery from "./YourSocialRecovery";
 
 export default function App() {
 
@@ -31,11 +31,11 @@ export default function App() {
 
         console.log("Initialized")
 
-        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=0x70ebbe40c41295bc757b50de4325cb53a172f490`
-        await axios.get(url)
-            .then((response) => {
-                console.log(response.data)
-            })
+        // const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=0x70ebbe40c41295bc757b50de4325cb53a172f490`
+        // await axios.get(url)
+        //     .then((response) => {
+        //         console.log(response.data)
+        //     })
 
         // const url2 = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/addrecoverycontractaddress`
         // await axios.post(url2, {txHash: "0x50977eacc421d5f7b27b5dfc39854ffb8c12286ba49fb2e959b345b3c8f302fa"})
@@ -81,38 +81,14 @@ export default function App() {
     }
 
     useEffect(() => {
-        // initialize()
+        initialize()
     }, [])
 
-    // if (!signer) {
-    //     return <div>Loading...</div>
-    // }
 
-    return <div>
-        <div className={"centered-header"}>LUKSO Social recovery</div>
-        <div className={"view-recovery"}>
-            <InputGroup className="mb-3 view-recovery-width">
-                <Form.Control
-                    placeholder="Address"
-                    aria-label="Recipient's username"
-                    aria-describedby="basic-addon2"
-                />
-                <Button variant="primary" id="button-addon2">
-                    View recovery
-                </Button>
-            </InputGroup>
-            {/*<input placeholder={"Address"} type={"text"}/>*/}
-            {/**/}
-            {/*<Button variant="primary">View recovery</Button>{' '}*/}
-
-        </div>
-        <div className={"left centered-button"}>
-            <Button variant="outline-primary btn-lg">Your Social Recovery</Button>{' '}
-        </div>
-        <div className={"right centered-button"}>
-            <Button variant="primary btn-lg">You as a Guardian</Button>{' '}
-        </div>
-    </div>
+    return <Routes>
+        <Route path="/your-social-recovery" element={<YourSocialRecovery/>} />
+        <Route path="*" element={<MainPage/>}/>
+    </Routes>
     // <div>
     {/*<div>*/
     }
