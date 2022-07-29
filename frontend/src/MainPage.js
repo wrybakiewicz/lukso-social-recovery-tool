@@ -4,6 +4,8 @@ import Button from "react-bootstrap/Button";
 import React from "react";
 import {Link} from "react-router-dom";
 import styled from 'styled-components';
+import Header from "./Header";
+import './MainPage.css'
 
 const YourSocialRecoveryLink = styled(Link)`
     text-decoration: none;
@@ -18,8 +20,8 @@ const YouAsAGuardianLink = styled(Link)`
 const ViewRecoveryLink = YouAsAGuardianLink;
 
 export default function MainPage() {
-    return <div>
-        <div className={"centered-header"}>LUKSO Social recovery</div>
+    return <div className={"MainPage"}>
+        <Header />
         <div className={"view-recovery"}>
             <InputGroup className="mb-3 view-recovery-width">
                 <Form.Control
@@ -33,7 +35,7 @@ export default function MainPage() {
             </InputGroup>
         </div>
         <div className={"left centered-button"}>
-            <Button variant="outline-primary btn-lg"><YourSocialRecoveryLink to="/about">Your Social Recovery</YourSocialRecoveryLink></Button>{' '}
+            <Button variant="outline-primary btn-lg"><YourSocialRecoveryLink to="/your-social-recovery">Your Social Recovery</YourSocialRecoveryLink></Button>{' '}
         </div>
         <div className={"right centered-button"}>
             <Button variant="primary btn-lg"><YouAsAGuardianLink to="/about2">You as a Guardian</YouAsAGuardianLink></Button>{' '}

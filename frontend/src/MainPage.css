@@ -1,0 +1,9 @@
+.MainPage {
+    background-image: linear-gradient(90deg, #FC766AFF 50%, #5B84B1FF 50%);
+    height: 100%;
+    width: 100%;
+}
+
+#root {
+    height: 100%;
+}

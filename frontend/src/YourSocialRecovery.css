@@ -1,3 +1,9 @@
+.YourSocialRecovery {
+    height: 100%;
+    width: 100%;
+    background-color: #FC766AFF;
+}
+
 .left {
     width: 50%;
     height: 35vh;
@@ -6,14 +12,6 @@
 .right {
     width: 50%;
     height: 35vh;
-}
-
-.centered-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: 250%;
 }
 
 .centered-button {

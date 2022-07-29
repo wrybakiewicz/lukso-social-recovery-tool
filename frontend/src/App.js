@@ -1,9 +1,7 @@
 import {ContractFactory, ethers} from 'ethers';
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import LSP11BasicSocialRecovery
     from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
-import './App.css'
 import MainPage from "./MainPage";
 import {Route, Routes} from "react-router";
 import YourSocialRecovery from "./YourSocialRecovery";
