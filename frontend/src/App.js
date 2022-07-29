@@ -89,7 +89,7 @@ export default function App() {
         <Route path="/your-social-recovery/guardians" element={<Guardians />} />
         <Route path="/your-social-recovery/secret" element={<Secret />} />
         <Route path="/your-social-recovery/threshold" element={<Threshold />} />
-        <Route path="*" element={<MainPage/>}/>
+        <Route path="*" element={<MainPage signer={signer}/>}/>
     </Routes>
     // <div>
     {/*<div>*/

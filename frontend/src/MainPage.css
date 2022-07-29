@@ -60,3 +60,7 @@
 .left-color {
     color: #FC766AFF !important;
 }
+
+.disabled-link {
+    pointer-events: none;
+}
