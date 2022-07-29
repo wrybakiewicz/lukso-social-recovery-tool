@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import styled from 'styled-components';
 import Header from "./Header";
 import './MainPage.css'
+import axios from "axios";
 
 const YourSocialRecoveryLink = styled(Link)`
     text-decoration: none;
@@ -22,6 +23,8 @@ const ViewRecoveryLink = YouAsAGuardianLink;
 export default function MainPage({signer}) {
 
     const [address, setAddress] = useState()
+    const [socialRecoveryContractAddress, setSocialRecoveryContractAddress] = useState()
+    const [socialRecoveryNotDeployed, setSocialRecoveryNotDeployed] = useState()
 
     const initialize = async () => {
         console.log("Initializing MainPage")
@@ -29,12 +32,39 @@ export default function MainPage({signer}) {
             const address = await signer.getAddress()
             console.log("Address: " + address)
             setAddress(address)
+            updateSocialRecoveryContractAddress(address)
         }
+    }
+
+    const updateSocialRecoveryContractAddress = (address) => {
+        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=${address}`
+        axios.get(url)
+            .then((response) => {
+                const address = response.data
+                console.log("Social recovery contract address: " + address)
+                setSocialRecoveryContractAddress(address)
+            }).catch(e => {
+            if (e.response.status === 404) {
+                console.log("Social recovery contract not deployed")
+                setSocialRecoveryNotDeployed(true)
+            } else {
+                console.error(e)
+                throw e
+            }
+        })
     }
 
     useEffect(() => {
         initialize()
     }, [signer])
+
+    const yourSocialRecovery = (link) => <YourSocialRecoveryLink to={"/your-social-recovery/" + link}
+                                                                 className={!address ? "disabled-link" : ""}>
+        <Button variant="outline-primary btn-lg" disabled={!address}>
+            Your Social Recovery
+        </Button>{' '}
+    </YourSocialRecoveryLink>
+
 
     return <div className={"MainPage"}>
         <Header/>
@@ -53,11 +83,7 @@ export default function MainPage({signer}) {
             </InputGroup>
         </div>
         <div className={"left centered-button"}>
-            <YourSocialRecoveryLink to="/your-social-recovery/guardians" className={!address ? "disabled-link" : ""}>
-                <Button variant="outline-primary btn-lg" disabled={!address}>
-                    Your Social Recovery
-                </Button>{' '}
-            </YourSocialRecoveryLink>
+            {socialRecoveryNotDeployed ? yourSocialRecovery("deploy"): yourSocialRecovery("guardians")}
         </div>
         <div className={"right centered-button"}>
             <YouAsAGuardianLink to="/about2" className={!address ? "disabled-link" : ""}>

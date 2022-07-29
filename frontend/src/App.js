@@ -7,6 +7,7 @@ import {Route, Routes} from "react-router";
 import Guardians from "./Guardians";
 import Threshold from "./Threshold";
 import Secret from "./Secret";
+import DeployContract from "./DeployContract";
 
 export default function App() {
 
@@ -86,6 +87,7 @@ export default function App() {
 
 
     return <Routes>
+        <Route path="/your-social-recovery/deploy" element={<DeployContract signer={signer} />} />
         <Route path="/your-social-recovery/guardians" element={<Guardians />} />
         <Route path="/your-social-recovery/secret" element={<Secret />} />
         <Route path="/your-social-recovery/threshold" element={<Threshold />} />
