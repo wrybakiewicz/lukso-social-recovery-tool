@@ -1,11 +1,11 @@
 .left {
     width: 50%;
-    height: 90vh;
+    height: 35vh;
 }
 
 .right {
     width: 50%;
-    height: 90vh;
+    height: 35vh;
 }
 
 .centered-header {
@@ -28,7 +28,11 @@
     align-items: center;
     color: white;
     font-size: 150%;
-    height: 50%;
+    height: 30vh;
+}
+
+.view-recovery-width {
+    width: 30% !important;
 }
 
 .btn-outline-primary {

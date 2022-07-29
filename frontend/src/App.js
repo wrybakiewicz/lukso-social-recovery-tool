@@ -5,6 +5,8 @@ import LSP11BasicSocialRecovery
     from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
 import './App.css'
 import Button from 'react-bootstrap/Button';
+import {InputGroup} from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
 
 export default function App() {
 
@@ -79,7 +81,7 @@ export default function App() {
     }
 
     useEffect(() => {
-        initialize()
+        // initialize()
     }, [])
 
     // if (!signer) {
@@ -89,9 +91,19 @@ export default function App() {
     return <div>
         <div className={"centered-header"}>LUKSO Social recovery</div>
         <div className={"view-recovery"}>
-            <input placeholder={"Address"} type={"text"}/>
-
-            <Button variant="primary">View recovery</Button>{' '}
+            <InputGroup className="mb-3 view-recovery-width">
+                <Form.Control
+                    placeholder="Address"
+                    aria-label="Recipient's username"
+                    aria-describedby="basic-addon2"
+                />
+                <Button variant="primary" id="button-addon2">
+                    View recovery
+                </Button>
+            </InputGroup>
+            {/*<input placeholder={"Address"} type={"text"}/>*/}
+            {/**/}
+            {/*<Button variant="primary">View recovery</Button>{' '}*/}
 
         </div>
         <div className={"left centered-button"}>
