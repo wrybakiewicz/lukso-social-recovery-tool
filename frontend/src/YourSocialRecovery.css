@@ -7,7 +7,7 @@
 .navbar-width {
     width: 40% !important;
     display: inline-flex !important;
-    margin-left: 20%;
+    margin-left: 25%;
     background-color: white;
     padding: 5px;
 }
@@ -15,4 +15,11 @@
 .navbar-padding {
     padding-left: 10px;
     padding-right: 10px;
+}
+
+.content {
+    margin-top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

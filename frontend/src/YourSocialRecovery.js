@@ -14,7 +14,7 @@ export default function YourSocialRecovery({activeKey, content}) {
             <Nav.Link eventKey="2" as={Link} to="/your-social-recovery/secret">Secret</Nav.Link>
             <Nav.Link eventKey="3" as={Link} to="/your-social-recovery/threshold">Threshold</Nav.Link>
         </Nav>
-        <div>
+        <div className={"content"}>
             {content}
         </div>
 
