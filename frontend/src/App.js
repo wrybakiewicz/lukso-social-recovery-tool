@@ -8,13 +8,14 @@ import Guardians from "./Guardians";
 import Threshold from "./Threshold";
 import Secret from "./Secret";
 import DeployContract from "./DeployContract";
+import axios from "axios";
 
 export default function App() {
 
     const [signer, setSigner] = useState()
+    const [address, setAddress] = useState()
     const [contract, setContract] = useState()
-    const [newGuardian, setNewGuardian] = useState()
-    const [isGuardian, setIsGuardian] = useState()
+    const [socialRecoveryNotDeployed, setSocialRecoveryNotDeployed] = useState()
 
     const initialize = async () => {
         console.log("Initializing")
@@ -26,59 +27,42 @@ export default function App() {
         );
         const signer = etherProvider.getSigner();
         const address = await signer.getAddress();
-        console.log(address)
-
         setSigner(signer)
-
+        setAddress(address)
+        console.log(address)
+        updateSocialRecoveryContractAddress(address, signer)
         console.log("Initialized")
-
-        // const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=0x70ebbe40c41295bc757b50de4325cb53a172f490`
-        // await axios.get(url)
-        //     .then((response) => {
-        //         console.log(response.data)
-        //     })
-
-        // const url2 = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/addrecoverycontractaddress`
-        // await axios.post(url2, {txHash: "0x50977eacc421d5f7b27b5dfc39854ffb8c12286ba49fb2e959b345b3c8f302fa"})
-        //     .then((response) => {
-        //         console.log(response.data)
-        //     })
-        //
     }
 
-    const deploySocialRecovery = async () => {
-        console.log("Deploying social recovery")
-        const contractFactory = ContractFactory.fromSolidity(LSP11BasicSocialRecovery, signer)
-        const address = await signer.getAddress()
-        const contract = await contractFactory.deploy(address)
-        // const contract = await ContractFactory.getContract("0x093a5a8393fc11e23dba19fe41194b1cb78f4132", LSP11BasicSocialRecovery, signer)
-        // await contract.setThreshold(1)
-
+    const setSocialRecoveryContract = (address, signer) => {
+        console.log("Setting contract address " + address)
+        const contract = ContractFactory.getContract(address, LSP11BasicSocialRecovery.abi, signer)
         setContract(contract)
-
+        console.log("Set contract")
         console.log(contract)
-
-        // const threshold = await contract.getGuardiansThreshold()
-        // console.log(threshold)
     }
 
-    const addGuardian = async () => {
-        console.log("Adding guardian")
-
-        // await contract.addGuardian(newGuardian)
-        const contract = await ContractFactory.getContract("0x093a5a8393fc11e23dba19fe41194b1cb78f4132", LSP11BasicSocialRecovery.abi, signer)
-        console.log(await contract.getGuardiansThreshold())
-
-        await contract.addGuardian("0x70EbbE40C41295bC757B50dE4325cb53a172F490")
-        await contract.setThreshold(1)
-        console.log("Added guardian")
+    const setSocialRecoveryContractByAddress = (address) => {
+        setSocialRecoveryContract(address, signer)
     }
 
-    const updateIsGuardian = async (address) => {
-        console.log("Updating is guardian: " + address)
-        const threshold = await contract.getGuardiansThreshold()
-        console.log(threshold)
-        console.log("Updated is guardian")
+    const updateSocialRecoveryContractAddress = (accountAddress, signer) => {
+        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=${accountAddress}`
+        axios.get(url)
+            .then((response) => {
+                const address = response.data.deploymentAddress
+                console.log("Social recovery contract address: " + address)
+                setSocialRecoveryContract(address, signer)
+            }).catch(e => {
+            console.log("ERROR");
+            console.error(e);
+            if (e.response.status === 404) {
+                console.log("Social recovery contract not deployed")
+                setSocialRecoveryNotDeployed(true)
+            } else {
+                throw e
+            }
+        })
     }
 
     useEffect(() => {
@@ -87,29 +71,11 @@ export default function App() {
 
 
     return <Routes>
-        <Route path="/your-social-recovery/deploy" element={<DeployContract signer={signer} />} />
-        <Route path="/your-social-recovery/guardians" element={<Guardians />} />
-        <Route path="/your-social-recovery/secret" element={<Secret />} />
-        <Route path="/your-social-recovery/threshold" element={<Threshold />} />
-        <Route path="*" element={<MainPage signer={signer}/>}/>
+        <Route path="/your-social-recovery/deploy"
+               element={<DeployContract signer={signer} setContractAddress={setSocialRecoveryContractByAddress}/>}/>
+        <Route path="/your-social-recovery/guardians" element={<Guardians/>}/>
+        <Route path="/your-social-recovery/secret" element={<Secret/>}/>
+        <Route path="/your-social-recovery/threshold" element={<Threshold/>}/>
+        <Route path="*" element={<MainPage address={address} socialRecoveryNotDeployed={socialRecoveryNotDeployed}/>}/>
     </Routes>
-    // <div>
-    {/*<div>*/
-    }
-    {/*    <h3>My recovery</h3>*/
-    }
-    {/*    {contract ? null :*/
-    }
-    {/*        <div>*/
-    }
-    {/*            <button onClick={deploySocialRecovery}>Deploy</button>*/
-    }
-    {/*        </div>*/
-    }
-    {/*    }}*/
-    }
-    {/*</div>*/
-    }
-    {/*</div>*/
-    }
 }

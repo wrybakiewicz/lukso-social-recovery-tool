@@ -20,43 +20,7 @@ const YouAsAGuardianLink = styled(Link)`
 
 const ViewRecoveryLink = YouAsAGuardianLink;
 
-export default function MainPage({signer}) {
-
-    const [address, setAddress] = useState()
-    const [socialRecoveryContractAddress, setSocialRecoveryContractAddress] = useState()
-    const [socialRecoveryNotDeployed, setSocialRecoveryNotDeployed] = useState()
-
-    const initialize = async () => {
-        console.log("Initializing MainPage")
-        if (signer) {
-            const address = await signer.getAddress()
-            console.log("Address: " + address)
-            setAddress(address)
-            updateSocialRecoveryContractAddress(address)
-        }
-    }
-
-    const updateSocialRecoveryContractAddress = (address) => {
-        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=${address}`
-        axios.get(url)
-            .then((response) => {
-                const address = response.data
-                console.log("Social recovery contract address: " + address)
-                setSocialRecoveryContractAddress(address)
-            }).catch(e => {
-            if (e.response.status === 404) {
-                console.log("Social recovery contract not deployed")
-                setSocialRecoveryNotDeployed(true)
-            } else {
-                console.error(e)
-                throw e
-            }
-        })
-    }
-
-    useEffect(() => {
-        initialize()
-    }, [signer])
+export default function MainPage({address, socialRecoveryNotDeployed}) {
 
     const yourSocialRecovery = (link) => <YourSocialRecoveryLink to={"/your-social-recovery/" + link}
                                                                  className={!address ? "disabled-link" : ""}>

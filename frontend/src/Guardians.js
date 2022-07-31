@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import './Guardians.css'
 
-export default function Guardians() {
+export default function Guardians({contract}) {
     const content = <div className={"add-guardian"}>
         <InputGroup className="mb-3">
             <Form.Control

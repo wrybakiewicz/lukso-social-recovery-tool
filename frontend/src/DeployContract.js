@@ -10,9 +10,8 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import {toast} from "react-toastify";
 
-export default function DeployContract({signer}) {
+export default function DeployContract({signer, setContractAddress}) {
 
-    const [contract, setContract] = useState()
     const [deploying, setDeploying] = useState(false)
     const navigate = useNavigate();
 
@@ -26,10 +25,8 @@ export default function DeployContract({signer}) {
             error: 'Deployment failed 🤯'
         });
 
-        await deployPromise
-
-        console.log("Deployed social recovery contract")
-        console.log(contract)
+        const contractAddress = await deployPromise
+        setContractAddress(contractAddress)
         navigate('/your-social-recovery/guardians')
     }
 
@@ -38,16 +35,16 @@ export default function DeployContract({signer}) {
         const contractFactory = ContractFactory.fromSolidity(LSP11BasicSocialRecovery, signer)
         const address = await signer.getAddress()
         const contract = await contractFactory.deploy(address)
-
-        setContract(contract)
-
+        console.log(contract)
         await addSocialRecoveryContract(contract.deployTransaction.hash)
+        console.log("Deployed social recovery contract")
+        return contract.address
     }
 
     const addSocialRecoveryContract = async (hash) => {
         const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/addrecoverycontractaddress`
         await axios.post(url, {txHash: hash})
-            .then((response) => {
+            .then(() => {
                 console.log("Successfully added social recovery contract")
             })
     }
