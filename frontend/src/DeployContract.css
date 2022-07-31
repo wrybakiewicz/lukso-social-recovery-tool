@@ -5,3 +5,7 @@
 .deploy-font {
     font-size: 150% !important;
 }
+
+.deployInProgressButton {
+    display: inline-flex;
+}
