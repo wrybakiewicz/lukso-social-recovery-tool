@@ -1,6 +1,12 @@
-.add-guardian {
-    display: flex;
+.guardians {
+    display: block;
     justify-content: center;
     align-items: center;
     width: 30%;
+}
+
+.listGuardians {
+    color: white;
+    font-size: 150%;
+    margin-bottom: 3%;
 }

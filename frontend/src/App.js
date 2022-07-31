@@ -9,6 +9,7 @@ import Threshold from "./Threshold";
 import Secret from "./Secret";
 import DeployContract from "./DeployContract";
 import axios from "axios";
+import './App.css'
 
 export default function App() {
 
@@ -73,7 +74,7 @@ export default function App() {
     return <Routes>
         <Route path="/your-social-recovery/deploy"
                element={<DeployContract signer={signer} setContractAddress={setSocialRecoveryContractByAddress}/>}/>
-        <Route path="/your-social-recovery/guardians" element={<Guardians/>}/>
+        <Route path="/your-social-recovery/guardians" element={<Guardians contract={contract}/>}/>
         <Route path="/your-social-recovery/secret" element={<Secret/>}/>
         <Route path="/your-social-recovery/threshold" element={<Threshold/>}/>
         <Route path="*" element={<MainPage address={address} socialRecoveryNotDeployed={socialRecoveryNotDeployed}/>}/>

@@ -1,12 +1,11 @@
 import {InputGroup} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Link} from "react-router-dom";
 import styled from 'styled-components';
 import Header from "./Header";
 import './MainPage.css'
-import axios from "axios";
 
 const YourSocialRecoveryLink = styled(Link)`
     text-decoration: none;
