@@ -5,6 +5,9 @@ import Button from "react-bootstrap/Button";
 import './Guardians.css'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
+import {List} from "@mui/material";
+import Guardian from "./Guardian";
+
 const {ethers} = require("ethers");
 
 export default function Guardians({contract}) {
@@ -40,7 +43,7 @@ export default function Guardians({contract}) {
 
     const updateAddress = (address) => {
         setGuardianAddress(address)
-        if(ethers.utils.isAddress(address)) {
+        if (ethers.utils.isAddress(address)) {
             setIsAddressValid(true)
         } else {
             setIsAddressValid(false)
@@ -48,7 +51,7 @@ export default function Guardians({contract}) {
     }
 
     useEffect(() => {
-        if(contract) {
+        if (contract) {
             updateGuardians()
         }
     }, [contract])
@@ -57,8 +60,14 @@ export default function Guardians({contract}) {
         Connect your wallet
     </div>
 
+    const guardiansList = <div className={"listGuardians"}>
+        <List>
+            {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian}/></div>)}
+        </List>
+    </div>
+
     const content = <div className={"guardians"}>
-        <div className={"listGuardians"}>{guardians.map(guardian => <div>{guardian}</div>)}</div>
+        {guardians.length > 0 ? guardiansList : null}
         <InputGroup className="mb-3">
             <Form.Control
                 placeholder="Address"
@@ -67,7 +76,8 @@ export default function Guardians({contract}) {
                 value={guardianAddress}
                 onChange={e => updateAddress(e.target.value)}
             />
-            <Button variant="primary" id="button-addon2" onClick={addGuardian} disabled={addingGuardian || !isAddressValid}>
+            <Button variant="primary" id="button-addon2" onClick={addGuardian}
+                    disabled={addingGuardian || !isAddressValid}>
                 Add guardian
             </Button>
         </InputGroup>
