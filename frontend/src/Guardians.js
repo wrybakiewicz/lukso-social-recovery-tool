@@ -56,7 +56,7 @@ export default function Guardians({contract}) {
         }
     }, [contract])
 
-    const loading = <div className={"add-guardian connect-wallet"}>
+    const loading = <div className={"connect-wallet"}>
         Connect your wallet
     </div>
 
