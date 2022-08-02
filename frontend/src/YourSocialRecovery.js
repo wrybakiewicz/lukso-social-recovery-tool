@@ -26,7 +26,7 @@ export default function YourSocialRecovery({activeKey, content, contract, contra
             <Nav.Link eventKey="2" as={Link} to="/your-social-recovery/secret">Secret</Nav.Link>
             <Nav.Link eventKey="3" as={Link} to="/your-social-recovery/threshold">Threshold</Nav.Link>
         </Nav>
-        <div className={"content"}>
+        <div className={"yourSocialRecoveryContent"}>
             {contract ? content : loading}
         </div>
 

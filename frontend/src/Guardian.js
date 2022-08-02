@@ -15,6 +15,10 @@ export default function Guardian({contract, address}) {
         setRemoveInProgress(true)
         const deleteGuardianPromise = contract.removeGuardian(address).then(_ => {
             setRemoved(true)
+        }).catch(e => {
+            console.log("Error deleting guardian: " + address)
+            console.error(e)
+            throw e
         }).finally(_ => {
             setRemoveInProgress(false)
         })

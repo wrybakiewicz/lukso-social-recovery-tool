@@ -1,5 +1,5 @@
 .YourSocialRecovery {
-    height: 100%;
+    min-height: 100vh;
     width: 100%;
     background-color: #FC766AFF;
 }
@@ -17,7 +17,7 @@
     padding-right: 10px;
 }
 
-.content {
+.yourSocialRecoveryContent {
     margin-top: 1%;
     display: flex;
     justify-content: center;

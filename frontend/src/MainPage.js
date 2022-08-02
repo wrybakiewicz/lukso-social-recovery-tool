@@ -49,7 +49,7 @@ export default function MainPage({address, socialRecoveryNotDeployed}) {
             {socialRecoveryNotDeployed ? yourSocialRecovery("deploy"): yourSocialRecovery("guardians")}
         </div>
         <div className={"right centered-button"}>
-            <YouAsAGuardianLink to="/about2" className={!address ? "disabled-link" : ""}>
+            <YouAsAGuardianLink to="/your-as-a-guardian" className={!address ? "disabled-link" : ""}>
                 <Button variant="primary btn-lg" disabled={!address}>
                     You as a Guardian
                 </Button>{' '}
