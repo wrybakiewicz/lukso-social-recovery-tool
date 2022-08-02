@@ -8,7 +8,7 @@ import {IconButton, Tooltip, Typography} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import './Threshold.css'
 
-export default function Threshold({contract}) {
+export default function Threshold({contract, contractNotDeployed}) {
 
     const [thresholdInput, setThresholdInput] = useState('')
     const [isThresholdValid, setIsThresholdValid] = useState()
@@ -65,10 +65,6 @@ export default function Threshold({contract}) {
         </Tooltip>
     </div>
 
-    const loading = <div className={"connect-wallet"}>
-        Connect your wallet
-    </div>
-
     const content = <div>
         <InputGroup className="mb-3">
             {tooltip}
@@ -86,5 +82,5 @@ export default function Threshold({contract}) {
             </Button>
         </InputGroup>
     </div>
-    return <YourSocialRecovery activeKey={3} content={contract ? content : loading}/>
+    return <YourSocialRecovery activeKey={3} content={content} contract={contract} contractNotDeployed={contractNotDeployed}/>
 }

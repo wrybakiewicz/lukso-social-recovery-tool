@@ -73,10 +73,10 @@ export default function App() {
 
     return <Routes>
         <Route path="/your-social-recovery/deploy"
-               element={<DeployContract signer={signer} setContractAddress={setSocialRecoveryContractByAddress}/>}/>
-        <Route path="/your-social-recovery/guardians" element={<Guardians contract={contract}/>}/>
-        <Route path="/your-social-recovery/secret" element={<Secret contract={contract}/>}/>
-        <Route path="/your-social-recovery/threshold" element={<Threshold contract={contract}/>}/>
+               element={<DeployContract signer={signer} setContractAddress={setSocialRecoveryContractByAddress} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
+        <Route path="/your-social-recovery/guardians" element={<Guardians contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
+        <Route path="/your-social-recovery/secret" element={<Secret contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
+        <Route path="/your-social-recovery/threshold" element={<Threshold contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="*" element={<MainPage address={address} socialRecoveryNotDeployed={socialRecoveryNotDeployed}/>}/>
     </Routes>
 }

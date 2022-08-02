@@ -11,7 +11,7 @@ import InfoIcon from "@mui/icons-material/Info";
 
 const {ethers} = require("ethers");
 
-export default function Guardians({contract}) {
+export default function Guardians({contract, contractNotDeployed}) {
 
     const [guardianAddress, setGuardianAddress] = useState('')
     const [addingGuardian, setAddingGuardian] = useState(false)
@@ -65,10 +65,6 @@ export default function Guardians({contract}) {
         </Tooltip>
     </div>
 
-    const loading = <div className={"connect-wallet"}>
-        Connect your wallet
-    </div>
-
     const guardiansList = <div className={"listGuardians"}>
         <List>
             {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian}/></div>)}
@@ -92,5 +88,5 @@ export default function Guardians({contract}) {
             </Button>
         </InputGroup>
     </div>
-    return <YourSocialRecovery activeKey={1} content={contract ? content : loading}/>
+    return <YourSocialRecovery activeKey={1} content={content} contract={contract} contractNotDeployed={contractNotDeployed}/>
 }

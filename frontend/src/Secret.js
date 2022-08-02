@@ -10,7 +10,7 @@ import {toUtf8Bytes} from "@ethersproject/strings";
 import {toast} from "react-toastify";
 import './Secret.css'
 
-export default function Secret({contract}) {
+export default function Secret({contract, contractNotDeployed}) {
 
     const [secretInput, setSecretInput] = useState('')
     const [secretInputHash, setSecretInputHash] = useState()
@@ -50,10 +50,6 @@ export default function Secret({contract}) {
         </Tooltip>
     </div>
 
-    const loading = <div className={"connect-wallet"}>
-        Connect your wallet
-    </div>
-
     const content = <div className={"secret"}>
         <div className={"secretInput"}>
         <InputGroup className="mb-3">
@@ -72,5 +68,5 @@ export default function Secret({contract}) {
         </InputGroup>
         </div>
     </div>
-    return <YourSocialRecovery activeKey={2} content={contract ? content : loading}/>
+    return <YourSocialRecovery activeKey={2} content={content} contract={contract} contractNotDeployed={contractNotDeployed}/>
 }

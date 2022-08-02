@@ -10,10 +10,14 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import {toast} from "react-toastify";
 
-export default function DeployContract({signer, setContractAddress}) {
+export default function DeployContract({signer, setContractAddress, contractNotDeployed}) {
 
     const [deploying, setDeploying] = useState(false)
     const navigate = useNavigate();
+
+    if(!contractNotDeployed) {
+        navigate('/your-social-recovery/guardians')
+    }
 
     const deploySocialRecovery = async () => {
         console.log("Deploying social recovery contract")

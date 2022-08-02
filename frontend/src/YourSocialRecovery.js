@@ -3,8 +3,20 @@ import Header from "./Header";
 import BackButton from "./BackButton";
 import {Nav} from "react-bootstrap";
 import {Link} from "react-router-dom";
+import {useNavigate} from "react-router";
 
-export default function YourSocialRecovery({activeKey, content}) {
+export default function YourSocialRecovery({activeKey, content, contract, contractNotDeployed}) {
+
+    const navigate = useNavigate();
+
+    const loading = <div className={"connect-wallet"}>
+        Connect your wallet
+    </div>
+
+    if(contractNotDeployed) {
+        navigate('/your-social-recovery/deploy')
+    }
+
     return <div className={"YourSocialRecovery"}>
         <Header/>
         <BackButton color={"left-color"}/>
@@ -15,7 +27,7 @@ export default function YourSocialRecovery({activeKey, content}) {
             <Nav.Link eventKey="3" as={Link} to="/your-social-recovery/threshold">Threshold</Nav.Link>
         </Nav>
         <div className={"content"}>
-            {content}
+            {contract ? content : loading}
         </div>
 
     </div>
