@@ -39,7 +39,6 @@ export default function Threshold({contract}) {
 
     const updateThreshold = () => {
         console.log("Updating threshold " + thresholdInput)
-        console.log(thresholdInput)
         setIsUpdatingThreshold(true)
         const updateThresholdPromise = contract.setThreshold(thresholdInput)
         toast.promise(updateThresholdPromise, {
@@ -59,7 +58,7 @@ export default function Threshold({contract}) {
     }, [contract])
 
     const tooltip = <div className={"thresholdInfo"}>
-        <Tooltip title={<Typography fontSize={20}>Threshold is minimum guardians number to recover your account with secret</Typography>} className={"thresholdInfo"}>
+        <Tooltip title={<Typography fontSize={20}>Threshold is minimum guardians number to recover your account with secret. It is automatically updated to (half of guardians number + 1) when adding or removing guardian. You can set it here manually.</Typography>} className={"thresholdInfo"}>
             <IconButton>
                 <InfoIcon/>
             </IconButton>

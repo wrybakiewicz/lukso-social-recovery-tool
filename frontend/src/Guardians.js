@@ -5,8 +5,9 @@ import Button from "react-bootstrap/Button";
 import './Guardians.css'
 import {useEffect, useState} from "react";
 import {toast} from "react-toastify";
-import {List} from "@mui/material";
+import {IconButton, List, Tooltip, Typography} from "@mui/material";
 import Guardian from "./Guardian";
+import InfoIcon from "@mui/icons-material/Info";
 
 const {ethers} = require("ethers");
 
@@ -56,6 +57,14 @@ export default function Guardians({contract}) {
         }
     }, [contract])
 
+    const tooltip = <div className={"guardiansInfo"}>
+        <Tooltip title={<Typography fontSize={20}>Guardians can vote to recover your account. You can recover your account with secret phase and minimum guardian votes equal to threshold or by all (minimum 2) guardians voting unanimously.</Typography>} className={"guardiansInfo"}>
+            <IconButton>
+                <InfoIcon/>
+            </IconButton>
+        </Tooltip>
+    </div>
+
     const loading = <div className={"connect-wallet"}>
         Connect your wallet
     </div>
@@ -69,6 +78,7 @@ export default function Guardians({contract}) {
     const content = <div className={"guardians"}>
         {guardians.length > 0 ? guardiansList : null}
         <InputGroup className="mb-3">
+            {tooltip}
             <Form.Control
                 placeholder="Address"
                 aria-label="Recipient's username"
