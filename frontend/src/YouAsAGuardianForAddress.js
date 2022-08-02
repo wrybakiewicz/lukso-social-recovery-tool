@@ -2,7 +2,7 @@ import {Accordion} from "react-bootstrap";
 import YouAsAGuardianForAddressGuardians from "./YouAsAGuardianForAddressGuardians";
 
 export default function YouAsAGuardianForAddress() {
-    const guardians = ["guardian1", "guardian2"]
+    const guardians = ["0xa0cf024d03d05303569be9530422342e1ceaf481", "0xa0cf024d03d05303569be9530422342e1ceaf491"]
 
     return <div>
         <Accordion defaultActiveKey={['0', '1']} alwaysOpen flush>
