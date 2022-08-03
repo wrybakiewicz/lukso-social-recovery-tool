@@ -3,7 +3,8 @@
 const app = require('../../index.js');
 const chai = require('chai');
 const expect = chai.expect;
-
+const chaiAsPromised = require("chai-as-promised");
+chai.use(chaiAsPromised);
 
 describe('add recovery contract address', function () {
     it('should add recovery contract address', async () => {
@@ -28,5 +29,16 @@ describe('add recovery contract address', function () {
 
         expect(result).to.be.an('object');
         expect(result.statusCode).to.equal(400);
+    });
+
+    it('should fail when hash is wrong', async () => {
+        const event = {
+            "body": '{"txHash": "123"}'
+        }
+        let context;
+
+        const resultPromise = app.handler(event, context)
+
+        return expect(resultPromise).to.be.rejected;
     });
 });

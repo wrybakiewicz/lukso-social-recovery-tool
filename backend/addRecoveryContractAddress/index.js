@@ -70,6 +70,22 @@ const buildResponse = (statusCode, bodyJson) => {
     }
 }
 
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+const retryOperation = (operation, delay, retries) => new Promise((resolve, reject) => {
+    return operation
+        .then(resolve)
+        .catch((reason) => {
+            if (retries > 0) {
+                console.log("Retrying")
+                return wait(delay)
+                    .then(retryOperation.bind(null, operation, delay, retries - 1))
+                    .then(resolve)
+                    .catch(reject);
+            }
+            return reject(reason);
+        });
+});
 
 exports.handler = async (event, context) => {
     try {
@@ -79,7 +95,7 @@ exports.handler = async (event, context) => {
         const txHash = body.txHash
         console.log("TxHash: " + txHash)
 
-        const {contractAddress, ownerAddress} = await getRecoveryContractAddressWithOwnerAddress(txHash)
+        const {contractAddress, ownerAddress} = await retryOperation(getRecoveryContractAddressWithOwnerAddress(txHash), 1000, 5)
 
         console.log(contractAddress)
         console.log(ownerAddress)
