@@ -1,0 +1,8 @@
+.tableHeight {
+    height: 55px;
+}
+
+.rowCenter {
+    display: table-cell;
+    vertical-align: middle;
+}

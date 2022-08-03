@@ -1,8 +1,17 @@
-import {List} from "@mui/material";
 import YouAsAGuardianForAddressGuardian from "./YouAsAGuardianForAddressGuardian";
+import {Table} from "react-bootstrap";
 
 export default function YouAsAGuardianForAddressGuardians({guardians}) {
-    return <List>
-        {guardians.map(guardian => <div key={guardian}><YouAsAGuardianForAddressGuardian guardian={guardian}/></div>)}
-    </List>
+    return <Table striped>
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Guardian Address</th>
+            <th>New Owner Address</th>
+        </tr>
+        </thead>
+        <tbody>
+            {guardians.map(guardian => <YouAsAGuardianForAddressGuardian guardian={guardian}/>)}
+        </tbody>
+    </Table>
 }
