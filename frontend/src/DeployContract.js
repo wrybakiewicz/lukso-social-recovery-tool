@@ -69,7 +69,7 @@ export default function DeployContract({signer, setContractAddress, contractNotD
     return <div className={"YourSocialRecovery"}>
         <Header/>
         <BackButton color={"left-color"}/>
-        <div className={"content deploy"}>
+        <div className={"yourSocialRecoveryContent deploy"}>
             {deploying ? deployInProgressButton : deployButton}
         </div>
 
