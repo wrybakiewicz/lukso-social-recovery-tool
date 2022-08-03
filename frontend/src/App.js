@@ -44,8 +44,8 @@ export default function App() {
         console.log(contract)
     }
 
-    const setSocialRecoveryContractByAddress = (address) => {
-        setSocialRecoveryContract(address, signer)
+    const updateContract = () => {
+        updateSocialRecoveryContractAddress(address, signer)
     }
 
     const updateSocialRecoveryContractAddress = (accountAddress, signer) => {
@@ -54,6 +54,7 @@ export default function App() {
             .then((response) => {
                 const address = response.data.deploymentAddress
                 console.log("Social recovery contract address: " + address)
+                setSocialRecoveryNotDeployed(false)
                 setSocialRecoveryContract(address, signer)
             }).catch(e => {
             console.log("ERROR");
@@ -74,7 +75,7 @@ export default function App() {
 
     return <Routes>
         <Route path="/your-social-recovery/deploy"
-               element={<DeployContract signer={signer} setContractAddress={setSocialRecoveryContractByAddress} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
+               element={<DeployContract signer={signer} updateContract={updateContract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-social-recovery/guardians" element={<Guardians contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-social-recovery/secret" element={<Secret contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-social-recovery/threshold" element={<Threshold contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>

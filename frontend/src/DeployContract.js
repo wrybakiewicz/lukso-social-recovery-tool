@@ -10,7 +10,7 @@ import axios from "axios";
 import {useNavigate} from "react-router";
 import {toast} from "react-toastify";
 
-export default function DeployContract({signer, setContractAddress, contractNotDeployed}) {
+export default function DeployContract({signer, updateContract, contractNotDeployed}) {
 
     const [deploying, setDeploying] = useState(false)
     const navigate = useNavigate();
@@ -22,15 +22,17 @@ export default function DeployContract({signer, setContractAddress, contractNotD
     const deploySocialRecovery = async () => {
         console.log("Deploying social recovery contract")
 
-        const deployPromise = deploy()
+        const deployPromise = deploy().finally(_ => {
+            setDeploying(false)
+        })
 
         toast.promise(deployPromise, {
             success: 'Deployment successfully 👌',
             error: 'Deployment failed 🤯'
         });
 
-        const contractAddress = await deployPromise
-        setContractAddress(contractAddress)
+        await deployPromise
+        updateContract()
         navigate('/your-social-recovery/guardians')
     }
 
