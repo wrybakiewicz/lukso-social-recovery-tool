@@ -5,7 +5,7 @@ export default function YouAsAGuardianForAddress() {
     const guardians = ["0xa0cf024d03d05303569be9530422342e1ceaf491", "0xa0cf024d03d05303569be9530422342e1ceaf481", "0xa0cf024d03d05303569be9530422342e1ceaf411"]
 
     return <div>
-        <Accordion defaultActiveKey={['0', '1']} alwaysOpen flush>
+        <Accordion defaultActiveKey={['0']} alwaysOpen flush>
             <Accordion.Item eventKey="0">
                 <Accordion.Header>#1 Process</Accordion.Header>
                 <Accordion.Body>
