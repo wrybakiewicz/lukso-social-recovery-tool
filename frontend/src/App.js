@@ -57,7 +57,7 @@ export default function App() {
                 setSocialRecoveryNotDeployed(false)
                 setSocialRecoveryContract(address, signer)
             }).catch(e => {
-            console.log("ERROR");
+            console.log("Error");
             console.error(e);
             if (e.response.status === 404) {
                 console.log("Social recovery contract not deployed")
