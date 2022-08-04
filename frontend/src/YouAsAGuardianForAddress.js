@@ -15,8 +15,10 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
 
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
     const [activeKeys, setActiveKeys] = useState([1])
-    const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
     const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
+
+    const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
+    const newRecoveryProcessText = "New Recovery Process"
 
     const showFullAddress = useMediaQuery({
         query: '(min-width: 600px)'
@@ -38,6 +40,10 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
 
     const processOnClick = (e, index) => {
         console.log("Clicked " + index)
+        console.log(e)
+        if(e.target.innerHTML === newRecoveryProcessText && e.target.className === "accordion-button") {
+            setStartedNewRecoveryProcess(false)
+        }
         if (e.target.className === "accordion-button collapsed") {
             setActiveKeys([...activeKeys, index])
         } else if (e.target.className === "accordion-button") {
@@ -77,7 +83,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
     const newRecoveryProcess = () => {
         const nextIndex = getNextProcessIndex()
         return <Accordion.Item eventKey={nextIndex} onClick={(e) => processOnClick(e, nextIndex)}>
-            <Accordion.Header aria-disabled={true}>New Recovery Process</Accordion.Header>
+            <Accordion.Header aria-disabled={true}>{newRecoveryProcessText}</Accordion.Header>
             <Accordion.Body>
                 <StartNewRecoveryProcess contract={contract} newProcessCreated={newRecoveryProcessCreated}/>
             </Accordion.Body>
