@@ -2,7 +2,7 @@ import YouAsAGuardianForAddressGuardian from "./YouAsAGuardianForAddressGuardian
 import {Table} from "react-bootstrap";
 
 export default function YouAsAGuardianForAddressGuardians({guardians}) {
-    return <Table striped>
+    return <Table striped bordered>
         <thead>
         <tr>
             <th>#</th>

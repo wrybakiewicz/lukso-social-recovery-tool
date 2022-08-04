@@ -8,6 +8,7 @@ import {toast} from "react-toastify";
 import {IconButton, List, Tooltip, Typography} from "@mui/material";
 import Guardian from "./Guardian";
 import InfoIcon from "@mui/icons-material/Info";
+import { useMediaQuery } from 'react-responsive'
 
 const {ethers} = require("ethers");
 
@@ -17,6 +18,14 @@ export default function Guardians({contract, contractNotDeployed}) {
     const [addingGuardian, setAddingGuardian] = useState(false)
     const [isAddressValid, setIsAddressValid] = useState(false)
     const [guardians, setGuardians] = useState([])
+
+    const showFullAddress = useMediaQuery({
+        query: '(min-width: 1700px)'
+    })
+
+    const isVerySmallScreen = useMediaQuery({
+        query: '(max-width: 700px)'
+    })
 
     const addGuardian = () => {
         console.log("Adding guardian: " + guardianAddress)
@@ -67,7 +76,7 @@ export default function Guardians({contract, contractNotDeployed}) {
 
     const guardiansList = <div className={"listGuardians"}>
         <List>
-            {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian}/></div>)}
+            {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian} showFullAddress={showFullAddress} isVerySmallScreen={isVerySmallScreen}/></div>)}
         </List>
     </div>
 

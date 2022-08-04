@@ -3,8 +3,9 @@ import SecurityIcon from "@mui/icons-material/Security";
 import DeleteIcon from '@mui/icons-material/Delete';
 import {toast} from "react-toastify";
 import {useState} from "react";
+import {displayAddress} from './ResponsiveUtils'
 
-export default function Guardian({contract, address}) {
+export default function Guardian({contract, address, showFullAddress, isVerySmallScreen}) {
     const [removeInProgress, setRemoveInProgress] = useState(false)
     const [removed, setRemoved] = useState(false)
 
@@ -39,11 +40,11 @@ export default function Guardian({contract, address}) {
             <DeleteIcon />
         </IconButton>
     }>
-        <ListItemAvatar>
+        {isVerySmallScreen ? null : <ListItemAvatar>
             <Avatar>
                 <SecurityIcon/>
             </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={<a href={url} target="_blank">{address}</a>}/>
+        </ListItemAvatar>}
+        <ListItemText primary={<a href={url} target="_blank">{displayAddress(address, showFullAddress)}</a>}/>
     </ListItem>
 }
