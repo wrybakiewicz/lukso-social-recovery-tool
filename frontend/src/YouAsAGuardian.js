@@ -6,7 +6,7 @@ import YouAsAGuardianForAddress from "./YouAsAGuardianForAddress";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function YouAsAGuardian({address}) {
+export default function YouAsAGuardian({address, signer}) {
 
     const [recoveryAccounts, setRecoveryAccounts] = useState()
 
@@ -44,7 +44,7 @@ export default function YouAsAGuardian({address}) {
         <h4 className={"youAsAGuardianHeader"}>You are a guardian for following accounts</h4>
         <div className={"youAsAGuardianList"}>
             <Accordion defaultActiveKey={[0]} alwaysOpen flush>
-                {recoveryAccounts.map(recoveryAccount => <YouAsAGuardianForAddress recoveryAccount={recoveryAccount}/>)}
+                {recoveryAccounts.map(recoveryAccount => <YouAsAGuardianForAddress recoveryAccount={recoveryAccount} signer={signer}/>)}
             </Accordion>
         </div>
     </div>
@@ -62,7 +62,7 @@ export default function YouAsAGuardian({address}) {
     return <div className={"YouAsAGuardian"}>
         <Header/>
         <BackButton color={"left-color"}/>
-        {recoveryAccounts ? content : loading}
+        {recoveryAccounts && signer ? content : loading}
 
     </div>
 }

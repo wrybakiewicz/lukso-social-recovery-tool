@@ -5,13 +5,18 @@ import {displayAddress} from './ResponsiveUtils'
 import Button from "react-bootstrap/Button";
 import './YouAsAGuardianForAddress.css'
 import {useState} from "react";
+import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
+import {ContractFactory} from "ethers";
+import LSP11BasicSocialRecovery
+    from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
 
-export default function YouAsAGuardianForAddress({recoveryAccount}) {
+export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
     const guardians = ["0xa0cf024d03d05303569be9530422342e1ceaf491", "0xa0cf024d03d05303569be9530422342e1ceaf481", "0xa0cf024d03d05303569be9530422342e1ceaf411"]
     const processList = ["1", "2"]
 
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
     const [activeKeys, setActiveKeys] = useState(['1'])
+    const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
 
     const showFullAddress = useMediaQuery({
         query: '(min-width: 600px)'
@@ -19,20 +24,22 @@ export default function YouAsAGuardianForAddress({recoveryAccount}) {
 
     const processOnClick = (e, id) => {
         console.log("Clicked " + id)
-        console.log(e.target.className)
         if (e.target.className === "accordion-button collapsed") {
             setActiveKeys([...activeKeys, id])
-            console.log(activeKeys)
-        } else if(e.target.className === "accordion-button") {
+        } else if (e.target.className === "accordion-button") {
             const newActiveKeys = activeKeys.filter(element => element !== id)
             setActiveKeys(newActiveKeys)
-            console.log(activeKeys)
         }
     }
 
     const startNewRecoveryProcess = () => {
         setStartedNewRecoveryProcess(true)
         setActiveKeys([...activeKeys, '3'])
+    }
+
+    const newRecoveryProcessCreated = () => {
+        console.log("New recovery process created")
+        setStartedNewRecoveryProcess(false)
     }
 
     const startNewRecoveryProcessButton = () => <div className={"startNewRecoveryProcessButton"}>
@@ -46,7 +53,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount}) {
     const newRecoveryProcess = () => <Accordion.Item eventKey="3" onClick={(e) => processOnClick(e, "3")}>
         <Accordion.Header aria-disabled={true}>New Recovery Process</Accordion.Header>
         <Accordion.Body>
-            <YouAsAGuardianForAddressGuardians guardians={guardians}/>
+            <StartNewRecoveryProcess contract={contract} newProcessCreated={newRecoveryProcessCreated}/>
         </Accordion.Body>
     </Accordion.Item>
 
