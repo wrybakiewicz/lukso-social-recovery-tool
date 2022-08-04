@@ -4,7 +4,7 @@ import {useMediaQuery} from 'react-responsive'
 import {displayAddress} from './ResponsiveUtils'
 import Button from "react-bootstrap/Button";
 import './YouAsAGuardianForAddress.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
 import {ContractFactory} from "ethers";
 import LSP11BasicSocialRecovery
@@ -12,34 +12,58 @@ import LSP11BasicSocialRecovery
 
 export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
     const guardians = ["0xa0cf024d03d05303569be9530422342e1ceaf491", "0xa0cf024d03d05303569be9530422342e1ceaf481", "0xa0cf024d03d05303569be9530422342e1ceaf411"]
-    const processList = ["1", "2"]
 
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
-    const [activeKeys, setActiveKeys] = useState(['1'])
+    const [activeKeys, setActiveKeys] = useState([1])
     const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
+    const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
 
     const showFullAddress = useMediaQuery({
         query: '(min-width: 600px)'
     })
 
-    const processOnClick = (e, id) => {
-        console.log("Clicked " + id)
+    useEffect(_ => {
+        if(signer){
+            updateRecoveryProcessesIds()
+        }
+    }, [])
+
+    const getNextProcessIndex = () => {
+        if(recoveryProcessIdsWithIndices.length === 0) {
+            return 1
+        }
+        const lastIndex = recoveryProcessIdsWithIndices[recoveryProcessIdsWithIndices.length - 1].index
+        return lastIndex + 1
+    }
+
+    const processOnClick = (e, index) => {
+        console.log("Clicked " + index)
         if (e.target.className === "accordion-button collapsed") {
-            setActiveKeys([...activeKeys, id])
+            setActiveKeys([...activeKeys, index])
         } else if (e.target.className === "accordion-button") {
-            const newActiveKeys = activeKeys.filter(element => element !== id)
+            const newActiveKeys = activeKeys.filter(element => element !== index)
             setActiveKeys(newActiveKeys)
         }
     }
 
+    const updateRecoveryProcessesIds = async () => {
+        console.log("Updating recovery process ids")
+        const idsWithIndices = (await contract.getRecoverProcessesIds()).map((process, index) => {
+            return {process: process, index: index + 1}
+        })
+        console.log(idsWithIndices)
+        setRecoveryProcessIdsWithIndices(idsWithIndices)
+    }
+
     const startNewRecoveryProcess = () => {
         setStartedNewRecoveryProcess(true)
-        setActiveKeys([...activeKeys, '3'])
+        setActiveKeys([...activeKeys, getNextProcessIndex()])
     }
 
     const newRecoveryProcessCreated = () => {
         console.log("New recovery process created")
         setStartedNewRecoveryProcess(false)
+        updateRecoveryProcessesIds()
     }
 
     const startNewRecoveryProcessButton = () => <div className={"startNewRecoveryProcessButton"}>
@@ -50,15 +74,18 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
     </div>
 
 
-    const newRecoveryProcess = () => <Accordion.Item eventKey="3" onClick={(e) => processOnClick(e, "3")}>
-        <Accordion.Header aria-disabled={true}>New Recovery Process</Accordion.Header>
-        <Accordion.Body>
-            <StartNewRecoveryProcess contract={contract} newProcessCreated={newRecoveryProcessCreated}/>
-        </Accordion.Body>
-    </Accordion.Item>
+    const newRecoveryProcess = () => {
+        const nextIndex = getNextProcessIndex()
+        return <Accordion.Item eventKey={nextIndex} onClick={(e) => processOnClick(e, nextIndex)}>
+            <Accordion.Header aria-disabled={true}>New Recovery Process</Accordion.Header>
+            <Accordion.Body>
+                <StartNewRecoveryProcess contract={contract} newProcessCreated={newRecoveryProcessCreated}/>
+            </Accordion.Body>
+        </Accordion.Item>
+    }
 
-    const process = (id) => <Accordion.Item eventKey={id} onClick={(e) => processOnClick(e, id)}>
-        <Accordion.Header>#{id} Process</Accordion.Header>
+    const process = (processWithIndex) => <Accordion.Item eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
+        <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
         <Accordion.Body>
             <YouAsAGuardianForAddressGuardians guardians={guardians}/>
         </Accordion.Body>
@@ -69,7 +96,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
         <Accordion.Body>
             <div>
                 <Accordion activeKey={activeKeys} alwaysOpen flush>
-                    {processList.map(processElement => process(processElement))}
+                    {recoveryProcessIdsWithIndices.map(processWithIndex => process(processWithIndex))}
                     {startedNewRecoveryProcess ? newRecoveryProcess() : null}
                     {startedNewRecoveryProcess ? null : startNewRecoveryProcessButton()}
                 </Accordion>
