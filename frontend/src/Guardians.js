@@ -101,6 +101,7 @@ export default function Guardians({contract, contractNotDeployed, address}) {
         <InputGroup className="mb-3">
             {tooltip}
             <Form.Control
+                type="text"
                 placeholder="Address"
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"

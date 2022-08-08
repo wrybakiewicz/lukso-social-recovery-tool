@@ -34,6 +34,7 @@ export default function MainPage({address, socialRecoveryNotDeployed}) {
         <div className={"view-recovery"}>
             <InputGroup className="mb-3 view-recovery-width">
                 <Form.Control
+                    type="text"
                     placeholder="Address"
                     aria-label="Recipient's username"
                     aria-describedby="basic-addon2"

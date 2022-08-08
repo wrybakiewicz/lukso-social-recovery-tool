@@ -55,6 +55,7 @@ export default function Secret({contract, contractNotDeployed}) {
         <InputGroup className="mb-3">
             {tooltip}
             <Form.Control
+                type="text"
                 placeholder="New Secret"
                 aria-label="New Secret"
                 aria-describedby="basic-addon2"
