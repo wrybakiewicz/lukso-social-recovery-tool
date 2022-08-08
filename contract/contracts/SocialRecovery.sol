@@ -7,9 +7,10 @@ import {OwnableUnset} from "@erc725/smart-contracts/contracts/custom/OwnableUnse
 
 contract SocialRecovery is LSP11BasicSocialRecoveryCore {
 
-    constructor(address _account) {
+    constructor(address _account, bytes32 _initialSecretHash) {
         account = _account;
         OwnableUnset._setOwner(_account);
+        _secretHash = _initialSecretHash;
     }
 
     function getSecretHash() public view returns (bytes32) {
