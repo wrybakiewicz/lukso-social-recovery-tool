@@ -5,7 +5,7 @@ import {toast} from "react-toastify";
 import {useState} from "react";
 import {displayAddress} from './ResponsiveUtils'
 
-export default function Guardian({contract, address, showFullAddress, isVerySmallScreen}) {
+export default function Guardian({contract, address, showFullAddress, isVerySmallScreen, updateGuardiansOnBackend}) {
     const [removeInProgress, setRemoveInProgress] = useState(false)
     const [removed, setRemoved] = useState(false)
 
@@ -16,6 +16,7 @@ export default function Guardian({contract, address, showFullAddress, isVerySmal
         setRemoveInProgress(true)
         const deleteGuardianPromise = contract.removeGuardian(address).then(_ => {
             setRemoved(true)
+            updateGuardiansOnBackend()
         }).catch(e => {
             console.log("Error deleting guardian: " + address)
             console.error(e)
