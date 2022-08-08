@@ -89,7 +89,7 @@ const retryOperation = (operation, arg, delay, retries) => new Promise((resolve,
 
 exports.handler = async (event, context) => {
     try {
-        console.log("Getting recovery contract address for address")
+        console.log("Adding recovery contract address")
         console.log(event)
         const body = JSON.parse(event.body)
         const txHash = body.txHash
