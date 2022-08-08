@@ -12,4 +12,8 @@ contract SocialRecovery is LSP11BasicSocialRecoveryCore {
         OwnableUnset._setOwner(_account);
     }
 
+    function getSecretHash() public view returns (bytes32) {
+        return _secretHash;
+    }
+
 }
