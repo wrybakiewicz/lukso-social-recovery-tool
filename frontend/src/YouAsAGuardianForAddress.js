@@ -10,12 +10,11 @@ import {ContractFactory} from "ethers";
 import LSP11BasicSocialRecovery
     from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
 
-export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
-    const guardians = ["0xa0cf024d03d05303569be9530422342e1ceaf491", "0xa0cf024d03d05303569be9530422342e1ceaf481", "0xa0cf024d03d05303569be9530422342e1ceaf411"]
-
+export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
     const [activeKeys, setActiveKeys] = useState([1])
     const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
+    const [guardiansWithIndices, setGuardiansWithIndices] = useState([])
 
     const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
     const newRecoveryProcessText = "New Recovery Process"
@@ -26,6 +25,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
 
     useEffect(_ => {
         if(signer){
+            updateGuardians()
             updateRecoveryProcessesIds()
         }
     }, [])
@@ -39,8 +39,6 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
     }
 
     const processOnClick = (e, index) => {
-        console.log("Clicked " + index)
-        console.log(e)
         if(e.target.innerHTML === newRecoveryProcessText && e.target.className === "accordion-button") {
             setStartedNewRecoveryProcess(false)
         }
@@ -59,6 +57,23 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
         })
         console.log(idsWithIndices)
         setRecoveryProcessIdsWithIndices(idsWithIndices)
+    }
+
+    const updateGuardians = async () => {
+        console.log("Updating guardians")
+        const guardians = await contract.getGuardians()
+        const sortedGuardians = guardians.slice().sort((a, b) => {
+            if(b === address) {
+                return 1
+            } else {
+                return a.localeCompare(b)
+            }
+        })
+        const guardiansWithIndices = sortedGuardians.map((guardian, index) => {
+            return {guardian: guardian, index: index + 1}
+        })
+        console.log(guardiansWithIndices)
+        setGuardiansWithIndices(guardiansWithIndices)
     }
 
     const startNewRecoveryProcess = () => {
@@ -90,10 +105,10 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
         </Accordion.Item>
     }
 
-    const process = (processWithIndex) => <Accordion.Item eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
+    const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
         <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
         <Accordion.Body>
-            <YouAsAGuardianForAddressGuardians guardians={guardians}/>
+            <YouAsAGuardianForAddressGuardians process={processWithIndex.process} contract={contract} guardiansWithIndices={guardiansWithIndices} address={address}/>
         </Accordion.Body>
     </Accordion.Item>
 

@@ -44,7 +44,7 @@ export default function YouAsAGuardian({address, signer}) {
         <h4 className={"youAsAGuardianHeader"}>You are a guardian for following accounts</h4>
         <div className={"youAsAGuardianList"}>
             <Accordion defaultActiveKey={[0]} alwaysOpen flush>
-                {recoveryAccounts.map(recoveryAccount => <YouAsAGuardianForAddress recoveryAccount={recoveryAccount} signer={signer}/>)}
+                {recoveryAccounts.map(recoveryAccount => <YouAsAGuardianForAddress key={recoveryAccount.recoveryContractAddress} recoveryAccount={recoveryAccount} signer={signer} address={address}/>)}
             </Accordion>
         </div>
     </div>

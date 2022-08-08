@@ -5,9 +5,64 @@ import Button from "react-bootstrap/Button";
 import "./YouAsAGuardianForAddressGuardian.css"
 import InfoIcon from "@mui/icons-material/Info";
 import {displayAddress} from './ResponsiveUtils'
-import { useMediaQuery } from 'react-responsive'
+import {useMediaQuery} from 'react-responsive'
+import {useEffect, useState} from "react";
+import {ethers} from "ethers";
+import {toast} from "react-toastify";
 
-export default function YouAsAGuardianForAddressGuardian({guardian}) {
+export default function YouAsAGuardianForAddressGuardian({process, contract, guardianWithIndex, address}) {
+
+    const [isGuardianLoading, setIsGuardianLoading] = useState(true)
+    const [vote, setVote] = useState()
+    const [voteInput, setVoteInput] = useState('')
+    const [isInputAddressValid, setIsInputAddressValid] = useState(false)
+    const [voteInProgress, setVoteInProgress] = useState(false)
+
+    const initialize = async () => {
+        const vote = await contract.getGuardianVote(process, guardianWithIndex.guardian)
+        setVote(vote)
+        if(isVoted(vote) && guardianWithIndex.guardian === address) {
+            setVoteInput(vote)
+        }
+        setIsGuardianLoading(false)
+    }
+
+    useEffect(_ => {
+        initialize()
+    }, [])
+
+
+    const isAddressValid = (address) => {
+        return ethers.utils.isAddress(address)
+    }
+
+    const isVoted = (address) => {
+        return address !== "0x0000000000000000000000000000000000000000"
+    }
+
+    const updateAddressInput = (address) => {
+        setVoteInput(address)
+        if(isAddressValid(address) && vote !== address) {
+            setIsInputAddressValid(true)
+        } else {
+            setIsInputAddressValid(false)
+        }
+    }
+
+    const updateVote = () => {
+        console.log("Updating vote")
+        setVoteInProgress(true)
+        const updateVotePromise = contract.voteToRecover(process, voteInput)
+            .finally(_ => {
+                setVoteInProgress(false)
+            })
+
+        toast.promise(updateVotePromise, {
+            pending: 'Voting for address',
+            success: 'Voted for address 👌',
+            error: 'Vote for address failed 🤯'
+        });
+    }
 
     const showFullAddress = useMediaQuery({
         query: '(min-width: 1200px)'
@@ -15,10 +70,11 @@ export default function YouAsAGuardianForAddressGuardian({guardian}) {
 
     const url = 'https://explorer.execution.l16.lukso.network/address/'
 
-    const addressLink = <a href={url + guardian}
-                            target="_blank" className={"rowCenter"}>{displayAddress(guardian, showFullAddress)}</a>
+    const addressLink = (address) => <a href={url + address}
+                           target="_blank"
+                           className={"rowCenter"}>{displayAddress(address, showFullAddress)}</a>
 
-    const youLink = <a href={url + guardian}
+    const youLink = <a href={url + guardianWithIndex.guardian}
                        target="_blank" className={"rowCenter"}>You</a>
 
     const tooltip = <div className={"guardiansInfo"}>
@@ -30,6 +86,24 @@ export default function YouAsAGuardianForAddressGuardian({guardian}) {
         </Tooltip>
     </div>
 
+    const newOwnerAddress = () => {
+        if (isGuardianLoading) {
+            return <div className="d-flex justify-content-center">
+                <div className="spinner-border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </div>
+            </div>
+        } else if (guardianWithIndex.guardian === address) {
+            return input
+        } else {
+            if(isVoted(vote)) {
+                return addressLink(vote)
+            } else {
+                return "Not set yet"
+            }
+        }
+    }
+
     const input = <div>
         <InputGroup>
             {tooltip}
@@ -37,19 +111,19 @@ export default function YouAsAGuardianForAddressGuardian({guardian}) {
                 type={"text"}
                 placeholder="Address"
                 aria-label="Address"
-                value={null}
-                onChange={null}
+                value={voteInput}
+                onChange={(e) => updateAddressInput(e.target.value)}
             />
-            <Button variant="primary" onClick={null}
-                    disabled={true}>
+            <Button variant="primary" onClick={updateVote}
+                    disabled={!isInputAddressValid || voteInProgress}>
                 Update address
             </Button>
         </InputGroup>
     </div>
 
     return <tr className={'tableHeight'}>
-        <td className={"rowCenter"}>{guardian === '0xa0cf024d03d05303569be9530422342e1ceaf481' ? "2" : guardian === "0xa0cf024d03d05303569be9530422342e1ceaf411" ? "3" : "1"}</td>
-        <td className={"rowCenter"}>{guardian === '0xa0cf024d03d05303569be9530422342e1ceaf491' ? youLink : addressLink}</td>
-        <td className={"rowCenter"}>{guardian === '0xa0cf024d03d05303569be9530422342e1ceaf481' ? addressLink : guardian === "0xa0cf024d03d05303569be9530422342e1ceaf411" ? "Not set yet" : input}</td>
+        <td className={"rowCenter"}>{guardianWithIndex.index}</td>
+        <td className={"rowCenter"}>{guardianWithIndex.guardian === address ? youLink : addressLink(guardianWithIndex.guardian)}</td>
+        <td className={"rowCenter"}>{newOwnerAddress()}</td>
     </tr>
 }
