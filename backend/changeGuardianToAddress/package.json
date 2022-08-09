@@ -6,7 +6,6 @@
   "author": "SAM CLI",
   "license": "MIT",
   "dependencies": {
-    "@lukso/lsp-smart-contracts": "git://github.com/wrybakiewicz/lsp-smart-contracts.git#62061ffa24b222cf5c3491b133e3253afe411b5c",
     "chai-as-promised": "^7.1.1",
     "dotenv": "^16.0.0",
     "ethers": "^5.6.9",

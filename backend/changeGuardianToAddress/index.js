@@ -1,7 +1,7 @@
 require("dotenv").config()
 const { Pool } = require('pg')
 const {ethers, ContractFactory} = require("ethers");
-const LSP11BasicSocialRecovery = require("@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json");
+const SocialRecovery = require("./contracts/SocialRecovery.json");
 
 const dbConfig = {
     user: process.env.DB_USERNAME,
@@ -37,7 +37,7 @@ const initializeDbClient = async () => {
 
 const updateGuardians = async (address, contractAddress, currentGuardians) => {
     const provider = new ethers.providers.JsonRpcProvider("https://rpc.l16.lukso.network");
-    const contract = ContractFactory.getContract(contractAddress, LSP11BasicSocialRecovery.abi, provider)
+    const contract = ContractFactory.getContract(contractAddress, SocialRecovery.abi, provider)
     const guardiansFromContract = (await contract.getGuardians()).map(guardian => guardian.toLowerCase())
     const newGuardians = guardiansFromContract.filter(guardianFromContract => !currentGuardians.includes(guardianFromContract))
     const removedGuardians = currentGuardians.filter(currentGuardian => !guardiansFromContract.includes(currentGuardian))
