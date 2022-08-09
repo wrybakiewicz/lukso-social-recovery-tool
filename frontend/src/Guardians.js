@@ -40,7 +40,7 @@ export default function Guardians({contract, contractNotDeployed, address}) {
     const addGuardian = () => {
         console.log("Adding guardian: " + guardianAddress)
         setAddingGuardian(true)
-        const addGuardianPromise = contract.addGuardian(guardianAddress).then(_ => {
+        const addGuardianPromise = contract.addGuardianWithThresholdUpdate(guardianAddress).then(_ => {
             setGuardianAddress('')
             console.log("Added guardian")
             updateGuardiansOnBackend()

@@ -3,24 +3,45 @@ import BackButton from "./BackButton";
 import Button from "react-bootstrap/Button";
 import './DeployContract.css'
 import {ContractFactory} from "ethers";
-import LSP11BasicSocialRecovery
-    from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
+import SocialRecovery from "./contracts/SocialRecovery.json";
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router";
 import {toast} from "react-toastify";
+import {InputGroup} from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+import {IconButton, Tooltip, Typography} from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import {keccak256} from "@ethersproject/keccak256";
+import {toUtf8Bytes} from "@ethersproject/strings";
 
 export default function DeployContract({signer, updateContract, contractNotDeployed}) {
 
     const [deploying, setDeploying] = useState(false)
+    const [secretInput, setSecretInput] = useState('')
+    const [secretInputHash, setSecretInputHash] = useState()
+    const [isSecretValid, setIsSecretValid] = useState()
+
     const navigate = useNavigate();
 
-    if(!contractNotDeployed) {
+    if (!contractNotDeployed) {
         navigate('/your-social-recovery/guardians')
+    }
+
+    const updateSecretInput = (secret) => {
+        setSecretInput(secret)
+        const secretHash = keccak256(toUtf8Bytes(secret));
+        setSecretInputHash(secretHash)
+        if (secret === '') {
+            setIsSecretValid(false)
+        } else {
+            setIsSecretValid(true)
+        }
     }
 
     const deploySocialRecovery = async () => {
         console.log("Deploying social recovery contract")
+        console.log(secretInputHash)
 
         const deployPromise = deploy().finally(_ => {
             setDeploying(false)
@@ -38,9 +59,9 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
 
     const deploy = async () => {
         setDeploying(true)
-        const contractFactory = ContractFactory.fromSolidity(LSP11BasicSocialRecovery, signer)
+        const contractFactory = ContractFactory.fromSolidity(SocialRecovery, signer)
         const address = await signer.getAddress()
-        const contract = await contractFactory.deploy(address)
+        const contract = await contractFactory.deploy(address, secretInputHash)
         console.log(contract)
         await addSocialRecoveryContract(contract.deployTransaction.hash)
         console.log("Deployed social recovery contract")
@@ -55,10 +76,39 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
             })
     }
 
-    const deployButton = <Button variant="primary" id="button-addon2" className={"deploy-font"}
-                                 onClick={deploySocialRecovery}>
+    const info = <div className={"connect-wallet"}>
         Deploy your social recovery contract
-    </Button>
+    </div>
+
+    const secretTooltip = <div className={"secretInfo"}>
+        <Tooltip title={<Typography fontSize={20}>Secret is phase needed to recover your account when minimum guardian
+            number - threshold - voted to do so. Save this value in safe location.</Typography>}
+                 className={"secretInfo"}>
+            <IconButton>
+                <InfoIcon/>
+            </IconButton>
+        </Tooltip>
+    </div>
+
+    const deployContent = <div>
+        <div className={"secretInput"}>
+            <InputGroup className="mb-3">
+                {secretTooltip}
+                <Form.Control
+                    type="text"
+                    placeholder="Secret"
+                    aria-label="Secret"
+                    aria-describedby="basic-addon2"
+                    value={secretInput}
+                    onChange={e => updateSecretInput(e.target.value)}
+                />
+                <Button variant="primary" id="button-addon2" onClick={deploySocialRecovery}
+                        disabled={!isSecretValid}>
+                    Deploy
+                </Button>
+            </InputGroup>
+        </div>
+    </div>
 
     const deployInProgressButton = <Button variant="primary" id="button-addon2" className={"deploy-font"}
                                            onClick={deploySocialRecovery} disabled>
@@ -71,8 +121,9 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
     return <div className={"YourSocialRecovery"}>
         <Header/>
         <BackButton color={"left-color"}/>
+        {info}
         <div className={"yourSocialRecoveryContent deploy"}>
-            {deploying ? deployInProgressButton : deployButton}
+            {deploying ? deployInProgressButton : deployContent}
         </div>
 
     </div>

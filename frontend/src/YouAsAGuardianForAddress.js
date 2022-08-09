@@ -7,8 +7,7 @@ import './YouAsAGuardianForAddress.css'
 import {useEffect, useState} from "react";
 import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
 import {ContractFactory} from "ethers";
-import LSP11BasicSocialRecovery
-    from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
+import SocialRecovery from "./contracts/SocialRecovery.json";
 
 export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
@@ -16,7 +15,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
     const [guardiansWithIndices, setGuardiansWithIndices] = useState([])
 
-    const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, LSP11BasicSocialRecovery.abi, signer)
+    const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, SocialRecovery.abi, signer)
     const newRecoveryProcessText = "New Recovery Process"
 
     const showFullAddress = useMediaQuery({

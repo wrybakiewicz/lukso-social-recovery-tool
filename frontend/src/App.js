@@ -1,7 +1,6 @@
 import {ContractFactory, ethers} from 'ethers';
 import React, {useEffect, useState} from "react";
-import LSP11BasicSocialRecovery
-    from "@lukso/lsp-smart-contracts/artifacts/contracts/LSP11BasicSocialRecovery/LSP11BasicSocialRecovery.sol/LSP11BasicSocialRecovery.json";
+import SocialRecovery from "./contracts/SocialRecovery.json";
 import MainPage from "./MainPage";
 import {Route, Routes} from "react-router";
 import Guardians from "./Guardians";
@@ -38,7 +37,7 @@ export default function App() {
 
     const setSocialRecoveryContract = (address, signer) => {
         console.log("Setting contract address " + address)
-        const contract = ContractFactory.getContract(address, LSP11BasicSocialRecovery.abi, signer)
+        const contract = ContractFactory.getContract(address, SocialRecovery.abi, signer)
         setContract(contract)
         console.log("Set contract")
         console.log(contract)

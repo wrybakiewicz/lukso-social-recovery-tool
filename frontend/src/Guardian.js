@@ -14,7 +14,7 @@ export default function Guardian({contract, address, showFullAddress, isVerySmal
     const deleteGuardian = () => {
         console.log("Deleting " + address)
         setRemoveInProgress(true)
-        const deleteGuardianPromise = contract.removeGuardian(address).then(_ => {
+        const deleteGuardianPromise = contract.removeGuardianWithThresholdUpdate(address).then(_ => {
             setRemoved(true)
             updateGuardiansOnBackend()
         }).catch(e => {

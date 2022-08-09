@@ -50,7 +50,7 @@ export default function Secret({contract, contractNotDeployed}) {
         </Tooltip>
     </div>
 
-    const content = <div className={"secret"}>
+    const content = <div>
         <div className={"secretInput"}>
         <InputGroup className="mb-3">
             {tooltip}
