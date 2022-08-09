@@ -1,12 +1,12 @@
 {
   "name": "hardhat-project",
   "devDependencies": {
+    "@lukso/lsp-smart-contracts": "git://github.com/lukso-network/lsp-smart-contracts.git#fa8697a6454be8ef0c3ae5524c2a4bb9abfc7a29",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-etherscan": "^3.0.1",
     "chai": "^4.3.6",
-    "hardhat": "^2.10.1",
     "dotenv": "^16.0.0",
-    "hardhat-deploy": "^0.10.5",
-    "@lukso/lsp-smart-contracts": "git://github.com/lukso-network/lsp-smart-contracts.git#fa8697a6454be8ef0c3ae5524c2a4bb9abfc7a29"
+    "hardhat": "^2.10.1",
+    "hardhat-deploy": "^0.10.5"
   }
 }
