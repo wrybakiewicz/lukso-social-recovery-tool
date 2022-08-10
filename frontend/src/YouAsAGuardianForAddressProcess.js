@@ -4,9 +4,10 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useEffect, useState} from "react";
 
-export default function YouAsAGuardianForAddressProcess({processWithIndex, contract, guardiansWithIndices, address}) {
+export default function YouAsAGuardianForAddressProcess({processWithIndex, contract, guardiansWithIndices, address, threshold}) {
 
     const [guardianDetailsList, setGuardianDetailsList] = useState([])
+    const [isShowRecovery, setIsShowRecovery] = useState(false)
 
     const fetchGuardiansData = async () => {
         console.log("Fetching guardians data")
@@ -29,8 +30,21 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         setGuardianDetailsList(newGuardianDetailsList)
     }
 
+    const showRecovery = () => {
+        const votesForAddress = guardianDetailsList
+            .map(_ => _.guardian === address ? 1 : 0)
+            .reduce((partialSum, element) => partialSum + element, 0)
+        if(votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
+            return recoverWithoutSecret
+        } else if (threshold && votesForAddress >= threshold) {
+            return recoverWithSecret
+        } else {
+            return null
+        }
+    }
+
     useEffect(() => {
-        fetchGuardiansData()
+        fetchGuardiansData().then(_ => setIsShowRecovery(true))
     }, [])
 
     const processTable = <Table striped bordered>
@@ -101,8 +115,7 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
         <Accordion.Body>
             {processTable}
-            {recoverWithSecret}
-            {recoverWithoutSecret}
+            {isShowRecovery ? showRecovery(): null}
         </Accordion.Body>
     </div>
 }

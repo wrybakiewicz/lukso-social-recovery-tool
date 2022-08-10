@@ -1,4 +1,4 @@
-import {Accordion, InputGroup} from "react-bootstrap";
+import {Accordion} from "react-bootstrap";
 import YouAsAGuardianForAddressProcess from "./YouAsAGuardianForAddressProcess";
 import {useMediaQuery} from 'react-responsive'
 import {displayAddress} from './ResponsiveUtils'
@@ -24,7 +24,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     })
 
     useEffect(_ => {
-        if(signer){
+        if (signer) {
             updateGuardians()
             updateRecoveryProcessesIds()
             updateThreshold()
@@ -38,7 +38,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     }
 
     const getNextProcessIndex = () => {
-        if(recoveryProcessIdsWithIndices.length === 0) {
+        if (recoveryProcessIdsWithIndices.length === 0) {
             return 1
         }
         const lastIndex = recoveryProcessIdsWithIndices[recoveryProcessIdsWithIndices.length - 1].index
@@ -46,7 +46,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     }
 
     const processOnClick = (e, index) => {
-        if(e.target.innerHTML === newRecoveryProcessText && e.target.className === "accordion-button") {
+        if (e.target.innerHTML === newRecoveryProcessText && e.target.className === "accordion-button") {
             setStartedNewRecoveryProcess(false)
         }
         if (e.target.className === "accordion-button collapsed") {
@@ -70,7 +70,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         console.log("Updating guardians")
         const guardians = await contract.getGuardians()
         const sortedGuardians = guardians.slice().sort((a, b) => {
-            if(b === address) {
+            if (b === address) {
                 return 1
             } else {
                 return a.localeCompare(b)
@@ -112,13 +112,16 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         </Accordion.Item>
     }
 
-    const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
-        <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract} guardiansWithIndices={guardiansWithIndices} address={address}/>
+    const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index}
+                                                          onClick={(e) => processOnClick(e, processWithIndex.index)}>
+        <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract}
+                                         guardiansWithIndices={guardiansWithIndices} address={address} threshold={threshold}/>
     </Accordion.Item>
 
     const recoveryInfo = <div className={"recoveryInfo"}>
         {threshold ? <div>Minimum votes to recover account with secret: <b>{threshold}</b></div> : null}
-        {guardiansWithIndices.length >= 2 ? <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div> : null}
+        {guardiansWithIndices.length >= 2 ?
+            <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div> : null}
     </div>
 
     return <Accordion.Item eventKey={recoveryAccount.index}>
