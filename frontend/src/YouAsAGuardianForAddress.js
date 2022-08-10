@@ -12,8 +12,8 @@ import SocialRecovery from "./contracts/SocialRecovery.json";
 export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
     const [activeKeys, setActiveKeys] = useState([1])
-    const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
-    const [guardiansWithIndices, setGuardiansWithIndices] = useState([])
+    const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState()
+    const [guardiansWithIndices, setGuardiansWithIndices] = useState()
     const [threshold, setThreshold] = useState()
 
     const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, SocialRecovery.abi, signer)
@@ -118,23 +118,31 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
                                          guardiansWithIndices={guardiansWithIndices} address={address} threshold={threshold}/>
     </Accordion.Item>
 
-    const recoveryInfo = <div className={"recoveryInfo"}>
-        {threshold ? <div>Minimum votes to recover account with secret: <b>{threshold}</b></div> : null}
+    const recoveryInfo = () => <div className={"recoveryInfo"}>
+        <div>Minimum votes to recover account with secret: <b>{threshold}</b></div>
         {guardiansWithIndices.length >= 2 ?
             <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div> : null}
     </div>
 
-    return <Accordion.Item eventKey={recoveryAccount.index}>
-        <Accordion.Header>{displayAddress(recoveryAccount.accountAddress, showFullAddress)}</Accordion.Header>
-        <Accordion.Body>
-            <div>
-                {recoveryInfo}
+    const content = () => {
+        if(guardiansWithIndices && recoveryProcessIdsWithIndices && threshold) {
+            return <div>
+                {recoveryInfo()}
                 <Accordion activeKey={activeKeys} alwaysOpen flush>
                     {recoveryProcessIdsWithIndices.map(processWithIndex => process(processWithIndex))}
                     {startedNewRecoveryProcess ? newRecoveryProcess() : null}
                     {startedNewRecoveryProcess ? null : startNewRecoveryProcessButton()}
                 </Accordion>
             </div>
+        } else {
+            return null
+        }
+    }
+
+    return <Accordion.Item eventKey={recoveryAccount.index}>
+        <Accordion.Header>{displayAddress(recoveryAccount.accountAddress, showFullAddress)}</Accordion.Header>
+        <Accordion.Body>
+            {content()}
         </Accordion.Body>
     </Accordion.Item>
 }

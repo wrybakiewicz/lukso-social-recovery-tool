@@ -32,11 +32,11 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
 
     const showRecovery = () => {
         const votesForAddress = guardianDetailsList
-            .map(_ => _.guardian === address ? 1 : 0)
+            .map(_ => _.vote === address ? 1 : 0)
             .reduce((partialSum, element) => partialSum + element, 0)
         if(votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
             return recoverWithoutSecret
-        } else if (threshold && votesForAddress >= threshold) {
+        } else if (votesForAddress >= threshold) {
             return recoverWithSecret
         } else {
             return null
