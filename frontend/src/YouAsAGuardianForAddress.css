@@ -6,3 +6,9 @@
 .addressInput {
     width: 50%;
 }
+
+.recoveryInfo {
+    margin-bottom: 1%;
+    color: #5B84B1FF;
+    font-size: 150%;
+}

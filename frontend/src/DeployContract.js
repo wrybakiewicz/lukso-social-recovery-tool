@@ -76,7 +76,7 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
             })
     }
 
-    const info = <div className={"connect-wallet"}>
+    const info = <div className={"deploy-info"}>
         Deploy your social recovery contract
     </div>
 

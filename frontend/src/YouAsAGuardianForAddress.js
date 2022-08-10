@@ -1,4 +1,4 @@
-import {Accordion} from "react-bootstrap";
+import {Accordion, InputGroup} from "react-bootstrap";
 import YouAsAGuardianForAddressGuardians from "./YouAsAGuardianForAddressGuardians";
 import {useMediaQuery} from 'react-responsive'
 import {displayAddress} from './ResponsiveUtils'
@@ -8,12 +8,14 @@ import {useEffect, useState} from "react";
 import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
 import {ContractFactory} from "ethers";
 import SocialRecovery from "./contracts/SocialRecovery.json";
+import Form from "react-bootstrap/Form";
 
 export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)
     const [activeKeys, setActiveKeys] = useState([1])
     const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState([])
     const [guardiansWithIndices, setGuardiansWithIndices] = useState([])
+    const [threshold, setThreshold] = useState()
 
     const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, SocialRecovery.abi, signer)
     const newRecoveryProcessText = "New Recovery Process"
@@ -26,8 +28,15 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         if(signer){
             updateGuardians()
             updateRecoveryProcessesIds()
+            updateThreshold()
         }
     }, [])
+
+    const updateThreshold = async () => {
+        const threshold = (await contract.getGuardiansThreshold()).toNumber()
+        console.log(threshold)
+        setThreshold(threshold)
+    }
 
     const getNextProcessIndex = () => {
         if(recoveryProcessIdsWithIndices.length === 0) {
@@ -104,17 +113,66 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         </Accordion.Item>
     }
 
+    //TODO: move process to new component
     const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
         <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
         <Accordion.Body>
             <YouAsAGuardianForAddressGuardians process={processWithIndex.process} contract={contract} guardiansWithIndices={guardiansWithIndices} address={address}/>
+            <div>
+                <InputGroup className="mb-3">
+                    {null}
+                    <Form.Control
+                        type={"text"}
+                        placeholder="Current secret"
+                        aria-label="Current secret"
+                        aria-describedby="basic-addon2"
+                        value={null}
+                        onChange={null}
+                    />
+                    <Form.Control
+                        type={"text"}
+                        placeholder="New secret"
+                        aria-label="New secret"
+                        aria-describedby="basic-addon2"
+                        value={null}
+                        onChange={null}
+                    />
+                    <Button variant="primary" id="button-addon2" onClick={null}
+                            disabled={false}>
+                        Recover with secret
+                    </Button>
+                </InputGroup>
+            </div>
+            <div>
+                <InputGroup className="mb-3">
+                    {null}
+                    <Form.Control
+                        type={"text"}
+                        placeholder="New secret"
+                        aria-label="New secret"
+                        aria-describedby="basic-addon2"
+                        value={null}
+                        onChange={null}
+                    />
+                    <Button variant="primary" id="button-addon2" onClick={null}
+                            disabled={false}>
+                        Recover without secret
+                    </Button>
+                </InputGroup>
+            </div>
         </Accordion.Body>
     </Accordion.Item>
+
+    const recoveryInfo = <div className={"recoveryInfo"}>
+        {threshold ? <div>Minimum votes to recover account with secret: <b>{threshold}</b></div> : null}
+        <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div>
+    </div>
 
     return <Accordion.Item eventKey={recoveryAccount.index}>
         <Accordion.Header>{displayAddress(recoveryAccount.accountAddress, showFullAddress)}</Accordion.Header>
         <Accordion.Body>
             <div>
+                {recoveryInfo}
                 <Accordion activeKey={activeKeys} alwaysOpen flush>
                     {recoveryProcessIdsWithIndices.map(processWithIndex => process(processWithIndex))}
                     {startedNewRecoveryProcess ? newRecoveryProcess() : null}

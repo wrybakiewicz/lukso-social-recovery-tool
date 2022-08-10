@@ -11,7 +11,11 @@ export default function YouAsAGuardianForAddressGuardians({process, contract, gu
         </tr>
         </thead>
         <tbody>
-            {guardiansWithIndices.map(guardianWithIndex => <YouAsAGuardianForAddressGuardian key={guardianWithIndex.index} process={process} contract={contract} guardianWithIndex={guardianWithIndex} address={address}/>)}
+        {guardiansWithIndices.map(guardianWithIndex => <YouAsAGuardianForAddressGuardian key={guardianWithIndex.index}
+                                                                                         process={process}
+                                                                                         contract={contract}
+                                                                                         guardianWithIndex={guardianWithIndex}
+                                                                                         address={address}/>)}
         </tbody>
     </Table>
 }
