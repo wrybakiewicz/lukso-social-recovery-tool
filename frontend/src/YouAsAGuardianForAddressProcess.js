@@ -2,8 +2,24 @@ import YouAsAGuardianForAddressGuardian from "./YouAsAGuardianForAddressGuardian
 import {Accordion, InputGroup, Table} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import {useEffect, useState} from "react";
 
 export default function YouAsAGuardianForAddressProcess({processWithIndex, contract, guardiansWithIndices, address}) {
+
+    const [guardianDetailsList, setGuardianDetailsList] = useState([])
+
+    const fetchGuardiansData = async () => {
+        console.log("Fetching guardians data")
+        const guardianDetailsPromiseList = guardiansWithIndices.map(async guardianWithIndex => {
+            const vote = await contract.getGuardianVote(processWithIndex.process, guardianWithIndex.guardian)
+            return {guardian: guardianWithIndex.guardian, index: guardianWithIndex.index, vote: vote}
+        })
+        setGuardianDetailsList(await Promise.all(guardianDetailsPromiseList))
+    }
+
+    useEffect(() => {
+        fetchGuardiansData()
+    }, [])
 
     const processTable = <Table striped bordered>
         <thead>
@@ -14,11 +30,11 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         </tr>
         </thead>
         <tbody>
-        {guardiansWithIndices.map(guardianWithIndex => <YouAsAGuardianForAddressGuardian
-            key={guardianWithIndex.index}
+        {guardianDetailsList.map(guardianDetails => <YouAsAGuardianForAddressGuardian
+            key={guardianDetails.index}
             process={processWithIndex.process}
             contract={contract}
-            guardianWithIndex={guardianWithIndex}
+            guardianDetails={guardianDetails}
             address={address}/>)}
         </tbody>
     </Table>

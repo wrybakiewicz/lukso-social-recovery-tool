@@ -10,19 +10,16 @@ import {useEffect, useState} from "react";
 import {ethers} from "ethers";
 import {toast} from "react-toastify";
 
-export default function YouAsAGuardianForAddressGuardian({process, contract, guardianWithIndex, address}) {
+export default function YouAsAGuardianForAddressGuardian({process, contract, guardianDetails, address}) {
 
     const [isGuardianLoading, setIsGuardianLoading] = useState(true)
-    const [vote, setVote] = useState()
     const [voteInput, setVoteInput] = useState('')
     const [isInputAddressValid, setIsInputAddressValid] = useState(false)
     const [voteInProgress, setVoteInProgress] = useState(false)
 
     const initialize = async () => {
-        const vote = await contract.getGuardianVote(process, guardianWithIndex.guardian)
-        setVote(vote)
-        if(isVoted(vote) && guardianWithIndex.guardian === address) {
-            setVoteInput(vote)
+        if(isVoted(guardianDetails.vote) && guardianDetails.guardian === address) {
+            setVoteInput(guardianDetails.vote)
         }
         setIsGuardianLoading(false)
     }
@@ -42,7 +39,7 @@ export default function YouAsAGuardianForAddressGuardian({process, contract, gua
 
     const updateAddressInput = (address) => {
         setVoteInput(address)
-        if(isAddressValid(address) && vote !== address) {
+        if(isAddressValid(address) && guardianDetails.vote !== address) {
             setIsInputAddressValid(true)
         } else {
             setIsInputAddressValid(false)
@@ -74,7 +71,7 @@ export default function YouAsAGuardianForAddressGuardian({process, contract, gua
                            target="_blank"
                            className={"rowCenter"}>{displayAddress(address, showFullAddress)}</a>
 
-    const youLink = <a href={url + guardianWithIndex.guardian}
+    const youLink = <a href={url + guardianDetails.guardian}
                        target="_blank" className={"rowCenter"}>You</a>
 
     const tooltip = <div className={"guardiansInfo"}>
@@ -93,11 +90,11 @@ export default function YouAsAGuardianForAddressGuardian({process, contract, gua
                     <span className="sr-only">Loading...</span>
                 </div>
             </div>
-        } else if (guardianWithIndex.guardian === address) {
+        } else if (guardianDetails.guardian === address) {
             return input
         } else {
-            if(isVoted(vote)) {
-                return addressLink(vote)
+            if(isVoted(guardianDetails.vote)) {
+                return addressLink(guardianDetails.vote)
             } else {
                 return "Not set yet"
             }
@@ -122,8 +119,8 @@ export default function YouAsAGuardianForAddressGuardian({process, contract, gua
     </div>
 
     return <tr className={'tableHeight'}>
-        <td className={"rowCenter"}>{guardianWithIndex.index}</td>
-        <td className={"rowCenter"}>{guardianWithIndex.guardian === address ? youLink : addressLink(guardianWithIndex.guardian)}</td>
+        <td className={"rowCenter"}>{guardianDetails.index}</td>
+        <td className={"rowCenter"}>{guardianDetails.guardian === address ? youLink : addressLink(guardianDetails.guardian)}</td>
         <td className={"rowCenter"}>{newOwnerAddress()}</td>
     </tr>
 }

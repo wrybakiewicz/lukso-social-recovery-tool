@@ -119,7 +119,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
 
     const recoveryInfo = <div className={"recoveryInfo"}>
         {threshold ? <div>Minimum votes to recover account with secret: <b>{threshold}</b></div> : null}
-        <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div>
+        {guardiansWithIndices.length >= 2 ? <div>Votes to recover account without secret: <b>{guardiansWithIndices.length}</b></div> : null}
     </div>
 
     return <Accordion.Item eventKey={recoveryAccount.index}>
