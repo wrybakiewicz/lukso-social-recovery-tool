@@ -1,5 +1,5 @@
 import {Accordion, InputGroup} from "react-bootstrap";
-import YouAsAGuardianForAddressGuardians from "./YouAsAGuardianForAddressGuardians";
+import YouAsAGuardianForAddressProcess from "./YouAsAGuardianForAddressProcess";
 import {useMediaQuery} from 'react-responsive'
 import {displayAddress} from './ResponsiveUtils'
 import Button from "react-bootstrap/Button";
@@ -113,54 +113,8 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         </Accordion.Item>
     }
 
-    //TODO: move process to new component
     const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index} onClick={(e) => processOnClick(e, processWithIndex.index)}>
-        <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
-        <Accordion.Body>
-            <YouAsAGuardianForAddressGuardians process={processWithIndex.process} contract={contract} guardiansWithIndices={guardiansWithIndices} address={address}/>
-            <div>
-                <InputGroup className="mb-3">
-                    {null}
-                    <Form.Control
-                        type={"text"}
-                        placeholder="Current secret"
-                        aria-label="Current secret"
-                        aria-describedby="basic-addon2"
-                        value={null}
-                        onChange={null}
-                    />
-                    <Form.Control
-                        type={"text"}
-                        placeholder="New secret"
-                        aria-label="New secret"
-                        aria-describedby="basic-addon2"
-                        value={null}
-                        onChange={null}
-                    />
-                    <Button variant="primary" id="button-addon2" onClick={null}
-                            disabled={false}>
-                        Recover with secret
-                    </Button>
-                </InputGroup>
-            </div>
-            <div>
-                <InputGroup className="mb-3">
-                    {null}
-                    <Form.Control
-                        type={"text"}
-                        placeholder="New secret"
-                        aria-label="New secret"
-                        aria-describedby="basic-addon2"
-                        value={null}
-                        onChange={null}
-                    />
-                    <Button variant="primary" id="button-addon2" onClick={null}
-                            disabled={false}>
-                        Recover without secret
-                    </Button>
-                </InputGroup>
-            </div>
-        </Accordion.Body>
+        <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract} guardiansWithIndices={guardiansWithIndices} address={address}/>
     </Accordion.Item>
 
     const recoveryInfo = <div className={"recoveryInfo"}>
