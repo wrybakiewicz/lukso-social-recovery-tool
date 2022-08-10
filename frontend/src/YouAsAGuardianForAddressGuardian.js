@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import {ethers} from "ethers";
 import {toast} from "react-toastify";
 
-export default function YouAsAGuardianForAddressGuardian({process, contract, guardianDetails, address}) {
+export default function YouAsAGuardianForAddressGuardian({process, contract, guardianDetails, address, updateVoteInParent}) {
 
     const [isGuardianLoading, setIsGuardianLoading] = useState(true)
     const [voteInput, setVoteInput] = useState('')
@@ -48,8 +48,12 @@ export default function YouAsAGuardianForAddressGuardian({process, contract, gua
 
     const updateVote = () => {
         console.log("Updating vote")
+        const newVote = voteInput
         setVoteInProgress(true)
-        const updateVotePromise = contract.voteToRecover(process, voteInput)
+        const updateVotePromise = contract.voteToRecover(process, newVote)
+            .then(_ => {
+                updateVoteInParent(guardianDetails.index, newVote)
+            })
             .finally(_ => {
                 setVoteInProgress(false)
             })

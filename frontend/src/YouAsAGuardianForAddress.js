@@ -8,7 +8,6 @@ import {useEffect, useState} from "react";
 import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
 import {ContractFactory} from "ethers";
 import SocialRecovery from "./contracts/SocialRecovery.json";
-import Form from "react-bootstrap/Form";
 
 export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
     const [startedNewRecoveryProcess, setStartedNewRecoveryProcess] = useState(false)

@@ -17,6 +17,18 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         setGuardianDetailsList(await Promise.all(guardianDetailsPromiseList))
     }
 
+    const updateVote = (guardianIndex, vote) => {
+        console.log("Updating vote in parent")
+        const newGuardianDetailsList = guardianDetailsList.map(guardianDetails => {
+            if(guardianDetails.index === guardianIndex) {
+                return {guardian: guardianDetails.guardian, index: guardianDetails.index, vote: vote}
+            } else {
+                return guardianDetails
+            }
+        })
+        setGuardianDetailsList(newGuardianDetailsList)
+    }
+
     useEffect(() => {
         fetchGuardiansData()
     }, [])
@@ -35,7 +47,9 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
             process={processWithIndex.process}
             contract={contract}
             guardianDetails={guardianDetails}
-            address={address}/>)}
+            address={address}
+            updateVoteInParent={updateVote}
+        />)}
         </tbody>
     </Table>
 
