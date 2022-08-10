@@ -3,11 +3,21 @@ import {Accordion, InputGroup, Table} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useEffect, useState} from "react";
+import {IconButton, Tooltip, Typography} from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import "./YouAsAGuardianForAddressProcess.css"
 
-export default function YouAsAGuardianForAddressProcess({processWithIndex, contract, guardiansWithIndices, address, threshold}) {
+export default function YouAsAGuardianForAddressProcess({
+                                                            processWithIndex,
+                                                            contract,
+                                                            guardiansWithIndices,
+                                                            address,
+                                                            threshold
+                                                        }) {
 
     const [guardianDetailsList, setGuardianDetailsList] = useState([])
     const [isShowRecovery, setIsShowRecovery] = useState(false)
+
 
     const fetchGuardiansData = async () => {
         console.log("Fetching guardians data")
@@ -21,7 +31,7 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
     const updateVote = (guardianIndex, vote) => {
         console.log("Updating vote in parent")
         const newGuardianDetailsList = guardianDetailsList.map(guardianDetails => {
-            if(guardianDetails.index === guardianIndex) {
+            if (guardianDetails.index === guardianIndex) {
                 return {guardian: guardianDetails.guardian, index: guardianDetails.index, vote: vote}
             } else {
                 return guardianDetails
@@ -34,10 +44,10 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         const votesForAddress = guardianDetailsList
             .map(_ => _.vote === address ? 1 : 0)
             .reduce((partialSum, element) => partialSum + element, 0)
-        if(votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
-            return recoverWithoutSecret
+        if (votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
+            return recoverWithoutSecret()
         } else if (votesForAddress >= threshold) {
-            return recoverWithSecret
+            return recoverWithSecret()
         } else {
             return null
         }
@@ -67,9 +77,18 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         </tbody>
     </Table>
 
-    const recoverWithSecret = <div>
+    const recoveryWithSecretTooltip = () => <div className={"secretInfo"}>
+        <Tooltip title={<Typography fontSize={20}>Provide your secret and set new secret for next potential recovery.
+            If you forgot your secret - convince all guardians to vote for you.</Typography>} className={"secretInfo"}>
+            <IconButton>
+                <InfoIcon/>
+            </IconButton>
+        </Tooltip>
+    </div>
+
+    const recoverWithSecret = () => <div className={"maxRecoveryWithSecret"}>
         <InputGroup className="mb-3">
-            {null}
+            {recoveryWithSecretTooltip()}
             <Form.Control
                 type={"text"}
                 placeholder="Current secret"
@@ -93,9 +112,18 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         </InputGroup>
     </div>
 
-    const recoverWithoutSecret = <div>
+    const recoveryWithoutSecretTooltip = () => <div className={"secretInfo"}>
+        <Tooltip title={<Typography fontSize={20}>Provide new secret for next potential recovery and recover your
+            account.</Typography>} className={"secretInfo"}>
+            <IconButton>
+                <InfoIcon/>
+            </IconButton>
+        </Tooltip>
+    </div>
+
+    const recoverWithoutSecret = () => <div className={"maxRecoveryWithoutSecret"}>
         <InputGroup className="mb-3">
-            {null}
+            {recoveryWithoutSecretTooltip()}
             <Form.Control
                 type={"text"}
                 placeholder="New secret"
@@ -115,7 +143,7 @@ export default function YouAsAGuardianForAddressProcess({processWithIndex, contr
         <Accordion.Header>#{processWithIndex.index} Process</Accordion.Header>
         <Accordion.Body>
             {processTable}
-            {isShowRecovery ? showRecovery(): null}
+            {isShowRecovery ? showRecovery() : null}
         </Accordion.Body>
     </div>
 }
