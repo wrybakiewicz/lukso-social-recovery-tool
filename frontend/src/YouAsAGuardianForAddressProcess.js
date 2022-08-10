@@ -6,18 +6,55 @@ import {useEffect, useState} from "react";
 import {IconButton, Tooltip, Typography} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import "./YouAsAGuardianForAddressProcess.css"
+import {keccak256} from "@ethersproject/keccak256";
+import {toUtf8Bytes} from "@ethersproject/strings";
+import {toast} from "react-toastify";
 
 export default function YouAsAGuardianForAddressProcess({
                                                             processWithIndex,
                                                             contract,
                                                             guardiansWithIndices,
                                                             address,
-                                                            threshold
+                                                            threshold,
+                                                            currentSecretHash
                                                         }) {
 
     const [guardianDetailsList, setGuardianDetailsList] = useState([])
     const [isShowRecovery, setIsShowRecovery] = useState(false)
+    const [isNewSecretWithoutSecretValid, setIsNewSecretWithoutSecretValid] = useState(false)
+    const [newSecretWithoutSecretInput, setNewSecretWithoutSecretInput] = useState('')
+    const [newSecretWithoutSecretInputHash, setNewSecretWithoutSecretInputHash] = useState('')
+    const [isRecoveringWithoutSecret, setIsRecoveringWithoutSecret] = useState(false)
 
+    const updateNewSecretWithoutSecretInput = (secret) => {
+        setNewSecretWithoutSecretInput(secret)
+        const secretHash = calculateHash(secret)
+        setNewSecretWithoutSecretInputHash(secretHash)
+        if (secret === '' || secretHash === currentSecretHash) {
+            setIsNewSecretWithoutSecretValid(false)
+        } else {
+            setIsNewSecretWithoutSecretValid(true)
+        }
+    }
+
+    const recoverAccountWithoutSecret = async () => {
+        console.log("Recovering without secret: " + newSecretWithoutSecretInputHash + " process: " + processWithIndex.process)
+        setIsRecoveringWithoutSecret(true)
+
+        // const recoverAccountPromise = contract.recoverOwnership(processWithIndex.process, "abc", newSecretWithoutSecretInputHash)
+        const recoverAccountPromise = contract.recoverOwnershipWithoutSecret(processWithIndex.process, newSecretWithoutSecretInputHash)
+        toast.promise(recoverAccountPromise, {
+            pending: 'Recovering account',
+            success: 'Account recovered 👌',
+            error: 'Account recover failed 🤯'
+        }).finally(_ => {
+            setIsRecoveringWithoutSecret(false)
+        });
+    }
+
+    const calculateHash = (input) => {
+        return keccak256(toUtf8Bytes(input));
+    }
 
     const fetchGuardiansData = async () => {
         console.log("Fetching guardians data")
@@ -41,16 +78,16 @@ export default function YouAsAGuardianForAddressProcess({
     }
 
     const showRecovery = () => {
-        const votesForAddress = guardianDetailsList
-            .map(_ => _.vote === address ? 1 : 0)
-            .reduce((partialSum, element) => partialSum + element, 0)
-        if (votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
+        // const votesForAddress = guardianDetailsList
+        //     .map(_ => _.vote === address ? 1 : 0)
+        //     .reduce((partialSum, element) => partialSum + element, 0)
+        // if (votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
             return recoverWithoutSecret()
-        } else if (votesForAddress >= threshold) {
-            return recoverWithSecret()
-        } else {
-            return null
-        }
+        // } else if (votesForAddress >= threshold) {
+        //     return recoverWithSecret()
+        // } else {
+        //     return null
+        // }
     }
 
     useEffect(() => {
@@ -129,11 +166,11 @@ export default function YouAsAGuardianForAddressProcess({
                 placeholder="New secret"
                 aria-label="New secret"
                 aria-describedby="basic-addon2"
-                value={null}
-                onChange={null}
+                value={newSecretWithoutSecretInput}
+                onChange={e => updateNewSecretWithoutSecretInput(e.target.value)}
             />
-            <Button variant="primary" id="button-addon2" onClick={null}
-                    disabled={false}>
+            <Button variant="primary" id="button-addon2" onClick={recoverAccountWithoutSecret}
+                    disabled={!isNewSecretWithoutSecretValid}>
                 Recover without secret
             </Button>
         </InputGroup>

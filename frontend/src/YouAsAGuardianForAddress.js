@@ -15,6 +15,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     const [recoveryProcessIdsWithIndices, setRecoveryProcessIdsWithIndices] = useState()
     const [guardiansWithIndices, setGuardiansWithIndices] = useState()
     const [threshold, setThreshold] = useState()
+    const [secretHash, setSecretHash] = useState()
 
     const contract = ContractFactory.getContract(recoveryAccount.recoveryContractAddress, SocialRecovery.abi, signer)
     const newRecoveryProcessText = "New Recovery Process"
@@ -28,6 +29,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
             updateGuardians()
             updateRecoveryProcessesIds()
             updateThreshold()
+            updateSecretHash()
         }
     }, [])
 
@@ -35,6 +37,11 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         const threshold = (await contract.getGuardiansThreshold()).toNumber()
         console.log(threshold)
         setThreshold(threshold)
+    }
+
+    const updateSecretHash = async () => {
+        const secretHash = (await contract.getSecretHash())
+        setSecretHash(secretHash)
     }
 
     const getNextProcessIndex = () => {
@@ -115,7 +122,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index}
                                                           onClick={(e) => processOnClick(e, processWithIndex.index)}>
         <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract}
-                                         guardiansWithIndices={guardiansWithIndices} address={address} threshold={threshold}/>
+                                         guardiansWithIndices={guardiansWithIndices} address={address} threshold={threshold} currentSecretHash={secretHash}/>
     </Accordion.Item>
 
     const recoveryInfo = () => <div className={"recoveryInfo"}>
@@ -125,7 +132,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     </div>
 
     const content = () => {
-        if(guardiansWithIndices && recoveryProcessIdsWithIndices && threshold) {
+        if(guardiansWithIndices && recoveryProcessIdsWithIndices && threshold && secretHash) {
             return <div>
                 {recoveryInfo()}
                 <Accordion activeKey={activeKeys} alwaysOpen flush>
