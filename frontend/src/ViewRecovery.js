@@ -7,6 +7,8 @@ import axios from "axios";
 import {ContractFactory} from "ethers";
 import SocialRecovery from "./contracts/SocialRecovery.json";
 import {Card} from "react-bootstrap";
+import {useMediaQuery} from "react-responsive";
+import {displayAddress} from "./ResponsiveUtils";
 
 export default function ViewRecovery({signer}) {
 
@@ -14,6 +16,10 @@ export default function ViewRecovery({signer}) {
     const [contractNotDeployed, setContractNotDeployed] = useState(false)
 
     let {address} = useParams();
+
+    const showFullAddress = useMediaQuery({
+        query: '(min-width: 600px)'
+    })
 
     useEffect(_ => {
         if (signer) {
@@ -54,7 +60,7 @@ export default function ViewRecovery({signer}) {
         <div className={"viewRecoveryAccount"}>
             <Card>
                 <Card.Body>
-                    {address}
+                    {displayAddress(address, showFullAddress)}
 
                 </Card.Body>
             </Card>
