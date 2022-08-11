@@ -3,3 +3,23 @@
     width: 100%;
     background-color: #5B84B1FF;
 }
+
+.viewRecoveryAccount {
+    margin: auto;
+    display: block;
+    width: 70%;
+    padding-bottom: 2%;
+}
+
+.viewRecoveryHeader {
+    display: flex;
+    justify-content: center;
+    color: white;
+    margin-bottom: 1%;
+}
+
+.viewRecoveryContent {
+    margin-top: 1%;
+    justify-content: center;
+    align-items: center;
+}

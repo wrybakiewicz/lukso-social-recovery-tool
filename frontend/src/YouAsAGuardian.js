@@ -40,7 +40,7 @@ export default function YouAsAGuardian({address, signer}) {
         }
     }, [address])
 
-    const guardedAccounts = () => <div className={"youAsAGuardianContent youAsAGuardianDetails"}>
+    const guardedAccounts = () => <div className={"youAsAGuardianContent"}>
         <h4 className={"youAsAGuardianHeader"}>You are a guardian for following accounts</h4>
         <div className={"youAsAGuardianList"}>
             <Accordion defaultActiveKey={[0]} alwaysOpen flush>

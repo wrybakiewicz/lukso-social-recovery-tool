@@ -6,6 +6,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import {ContractFactory} from "ethers";
 import SocialRecovery from "./contracts/SocialRecovery.json";
+import {Card} from "react-bootstrap";
 
 export default function ViewRecovery({signer}) {
 
@@ -15,7 +16,7 @@ export default function ViewRecovery({signer}) {
     let {address} = useParams();
 
     useEffect(_ => {
-        if(signer) {
+        if (signer) {
             updateSocialRecoveryContractAddress()
         }
     }, [signer])
@@ -48,7 +49,17 @@ export default function ViewRecovery({signer}) {
         Connect your wallet
     </div>
 
-    const content = <div>{address}</div>
+    const content = <div className={"viewRecoveryContent"}>
+        <h4 className={"viewRecoveryHeader"}>You are viewing details of social recovery for account</h4>
+        <div className={"viewRecoveryAccount"}>
+            <Card>
+                <Card.Body>
+                    {address}
+
+                </Card.Body>
+            </Card>
+        </div>
+    </div>
 
     return <div className={"ViewRecovery"}>
         <Header/>
