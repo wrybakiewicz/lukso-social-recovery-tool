@@ -4,8 +4,6 @@ import BackButton from "./BackButton";
 import "./ViewRecovery.css"
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {ContractFactory} from "ethers";
-import SocialRecovery from "./contracts/SocialRecovery.json";
 import {Card} from "react-bootstrap";
 import {useMediaQuery} from "react-responsive";
 import {displayAddress} from "./ResponsiveUtils";
