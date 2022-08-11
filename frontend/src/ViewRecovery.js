@@ -59,8 +59,10 @@ export default function ViewRecovery({signer}) {
         <h4 className={"viewRecoveryHeader"}>You are viewing details of social recovery for account</h4>
         <div className={"viewRecoveryAccount"}>
             <Card>
-                <Card.Body>
+                <Card.Title className={"viewRecoveryAddressHeader"}>
                     {displayAddress(address, showFullAddress)}
+                </Card.Title>
+                <Card.Body>
                     <RecoveryForAccount contractAddress={contractAddress} signer={signer}/>
                 </Card.Body>
             </Card>
