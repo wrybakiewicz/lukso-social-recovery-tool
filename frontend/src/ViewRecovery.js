@@ -9,10 +9,11 @@ import SocialRecovery from "./contracts/SocialRecovery.json";
 import {Card} from "react-bootstrap";
 import {useMediaQuery} from "react-responsive";
 import {displayAddress} from "./ResponsiveUtils";
+import RecoveryForAccount from "./RecoveryForAccount";
 
 export default function ViewRecovery({signer}) {
 
-    const [contract, setContract] = useState()
+    const [contractAddress, setContractAddress] = useState()
     const [contractNotDeployed, setContractNotDeployed] = useState(false)
 
     let {address} = useParams();
@@ -33,8 +34,7 @@ export default function ViewRecovery({signer}) {
             .then((response) => {
                 const address = response.data.deploymentAddress
                 console.log("Social recovery contract address: " + address)
-                const contract = ContractFactory.getContract(address, SocialRecovery.abi, signer)
-                setContract(contract)
+                setContractAddress(address)
             }).catch(e => {
             console.log("Error");
             console.error(e);
@@ -61,7 +61,7 @@ export default function ViewRecovery({signer}) {
             <Card>
                 <Card.Body>
                     {displayAddress(address, showFullAddress)}
-
+                    <RecoveryForAccount contractAddress={contractAddress} signer={signer}/>
                 </Card.Body>
             </Card>
         </div>
@@ -70,7 +70,6 @@ export default function ViewRecovery({signer}) {
     return <div className={"ViewRecovery"}>
         <Header/>
         <BackButton color={"left-color"}/>
-        {contractNotDeployed ? addressHasNoContract : contract ? content : loading}
-
+        {contractNotDeployed ? addressHasNoContract : contractAddress ? content : loading}
     </div>
 }
