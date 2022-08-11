@@ -1,5 +1,5 @@
 import YouAsAGuardianForAddressGuardian from "./YouAsAGuardianForAddressGuardian";
-import {Accordion, InputGroup, Table} from "react-bootstrap";
+import {Accordion, InputGroup, OverlayTrigger, Table} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import {useEffect, useState} from "react";
@@ -21,10 +21,19 @@ export default function YouAsAGuardianForAddressProcess({
 
     const [guardianDetailsList, setGuardianDetailsList] = useState([])
     const [isShowRecovery, setIsShowRecovery] = useState(false)
+
     const [isNewSecretWithoutSecretValid, setIsNewSecretWithoutSecretValid] = useState(false)
     const [newSecretWithoutSecretInput, setNewSecretWithoutSecretInput] = useState('')
     const [newSecretWithoutSecretInputHash, setNewSecretWithoutSecretInputHash] = useState('')
     const [isRecoveringWithoutSecret, setIsRecoveringWithoutSecret] = useState(false)
+
+    const [isNewSecretWithSecretValid, setIsNewSecretWithSecretValid] = useState(false)
+    const [newSecretWithSecretInput, setNewSecretWithSecretInput] = useState('')
+    const [newSecretWithSecretInputHash, setNewSecretWithSecretInputHash] = useState('')
+    const [isRecoveringWithSecret, setIsRecoveringWithSecret] = useState(false)
+
+    const [isCurrentSecretValid, setIsCurrentSecretValid] = useState(false)
+    const [currentSecretInput, setCurrentSecretInput] = useState('')
 
     const updateNewSecretWithoutSecretInput = (secret) => {
         setNewSecretWithoutSecretInput(secret)
@@ -37,11 +46,31 @@ export default function YouAsAGuardianForAddressProcess({
         }
     }
 
+    const updateNewSecretWithSecretInput = (secret) => {
+        setNewSecretWithSecretInput(secret)
+        const secretHash = calculateHash(secret)
+        setNewSecretWithSecretInputHash(secretHash)
+        if (secret === '' || secretHash === currentSecretHash) {
+            setIsNewSecretWithSecretValid(false)
+        } else {
+            setIsNewSecretWithSecretValid(true)
+        }
+    }
+
+    const updateCurrentSecretInput = (secret) => {
+        setCurrentSecretInput(secret)
+        const secretHash = calculateHash(secret)
+        if (secretHash === currentSecretHash) {
+            setIsCurrentSecretValid(true)
+        } else {
+            setIsCurrentSecretValid(false)
+        }
+    }
+
     const recoverAccountWithoutSecret = async () => {
         console.log("Recovering without secret: " + newSecretWithoutSecretInputHash + " process: " + processWithIndex.process)
         setIsRecoveringWithoutSecret(true)
 
-        // const recoverAccountPromise = contract.recoverOwnership(processWithIndex.process, "abc", newSecretWithoutSecretInputHash)
         const recoverAccountPromise = contract.recoverOwnershipWithoutSecret(processWithIndex.process, newSecretWithoutSecretInputHash)
         toast.promise(recoverAccountPromise, {
             pending: 'Recovering account',
@@ -49,6 +78,20 @@ export default function YouAsAGuardianForAddressProcess({
             error: 'Account recover failed 🤯'
         }).finally(_ => {
             setIsRecoveringWithoutSecret(false)
+        });
+    }
+
+    const recoverAccountWithSecret = async () => {
+        console.log("Recovering with secret: " + newSecretWithSecretInputHash + " process: " + processWithIndex.process)
+        setIsRecoveringWithSecret(true)
+
+        const recoverAccountPromise = contract.recoverOwnership(processWithIndex.process, currentSecretInput, newSecretWithSecretInputHash)
+        toast.promise(recoverAccountPromise, {
+            pending: 'Recovering account',
+            success: 'Account recovered 👌',
+            error: 'Account recover failed 🤯'
+        }).finally(_ => {
+            setIsRecoveringWithSecret(false)
         });
     }
 
@@ -78,16 +121,16 @@ export default function YouAsAGuardianForAddressProcess({
     }
 
     const showRecovery = () => {
-        // const votesForAddress = guardianDetailsList
-        //     .map(_ => _.vote === address ? 1 : 0)
-        //     .reduce((partialSum, element) => partialSum + element, 0)
-        // if (votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
+        const votesForAddress = guardianDetailsList
+            .map(_ => _.vote === address ? 1 : 0)
+            .reduce((partialSum, element) => partialSum + element, 0)
+        if (votesForAddress === guardianDetailsList.length && guardianDetailsList.length >= 2) {
             return recoverWithoutSecret()
-        // } else if (votesForAddress >= threshold) {
-        //     return recoverWithSecret()
-        // } else {
-        //     return null
-        // }
+        } else if (votesForAddress >= threshold) {
+            return recoverWithSecret()
+        } else {
+            return null
+        }
     }
 
     useEffect(() => {
@@ -131,19 +174,19 @@ export default function YouAsAGuardianForAddressProcess({
                 placeholder="Current secret"
                 aria-label="Current secret"
                 aria-describedby="basic-addon2"
-                value={null}
-                onChange={null}
+                value={currentSecretInput}
+                onChange={e => updateCurrentSecretInput(e.target.value)}
             />
             <Form.Control
                 type={"text"}
                 placeholder="New secret"
                 aria-label="New secret"
                 aria-describedby="basic-addon2"
-                value={null}
-                onChange={null}
+                value={newSecretWithSecretInput}
+                onChange={e => updateNewSecretWithSecretInput(e.target.value)}
             />
-            <Button variant="primary" id="button-addon2" onClick={null}
-                    disabled={false}>
+            <Button variant="primary" id="button-addon2" onClick={recoverAccountWithSecret}
+                    disabled={!isNewSecretWithSecretValid || isRecoveringWithSecret || !isCurrentSecretValid}>
                 Recover with secret
             </Button>
         </InputGroup>
@@ -170,7 +213,7 @@ export default function YouAsAGuardianForAddressProcess({
                 onChange={e => updateNewSecretWithoutSecretInput(e.target.value)}
             />
             <Button variant="primary" id="button-addon2" onClick={recoverAccountWithoutSecret}
-                    disabled={!isNewSecretWithoutSecretValid}>
+                    disabled={!isNewSecretWithoutSecretValid || isRecoveringWithoutSecret}>
                 Recover without secret
             </Button>
         </InputGroup>
