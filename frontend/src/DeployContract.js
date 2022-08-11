@@ -19,7 +19,9 @@ import Web3 from "web3";
 import {ERC725} from "@erc725/erc725.js";
 import LSP6Schema from "@erc725/erc725.js/schemas/LSP6KeyManager.json";
 
-export default function DeployContract({signer, updateContract, contractNotDeployed}) {
+const CONTRACT_CREATED_METHOD_ID = "0x01c42bd7"
+
+export default function DeployContract({signer, updateContract, contractNotDeployed, provider}) {
 
     const [deploying, setDeploying] = useState(false)
     const [secretInput, setSecretInput] = useState('')
@@ -65,17 +67,19 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
         setDeploying(true)
         const contractFactory = ContractFactory.fromSolidity(SocialRecovery, signer)
         const contract = await contractFactory.deploy(secretInputHash)
+        console.log(contract)
         const address = await signer.getAddress();
-        await addSocialRecoveryContract(contract.deployTransaction.hash)
-        const contractAddress = await getContractAddress(address)
+        const contractAddress = await getContractAddress(contract.deployTransaction.hash)
         await addPermissions(contractAddress, address)
+        await addSocialRecoveryContract(contract.deployTransaction.hash)
         console.log("Deployed social recovery contract")
     }
 
-    const getContractAddress = async (address) => {
-        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=${address}`
-        return axios.get(url)
-            .then((response) => response.data.deploymentAddress)
+    const getContractAddress = async (txHash) => {
+        const transaction = await provider.getTransactionReceipt(txHash)
+        const contractCreatedLog = transaction.logs.filter(log => log.topics[0].startsWith(CONTRACT_CREATED_METHOD_ID))[0]
+        const contractAddressAsBytes = contractCreatedLog.topics[2]
+        return "0x" + contractAddressAsBytes.slice(-40)
 
     }
 

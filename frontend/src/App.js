@@ -13,6 +13,7 @@ import YouAsAGuardian from "./YouAsAGuardian";
 
 export default function App() {
 
+    const [provider, setProvider] = useState()
     const [signer, setSigner] = useState()
     const [address, setAddress] = useState()
     const [contract, setContract] = useState()
@@ -28,6 +29,7 @@ export default function App() {
         );
         const signer = etherProvider.getSigner();
         const address = await signer.getAddress();
+        setProvider(etherProvider)
         setSigner(signer)
         setAddress(address)
         console.log(address)
@@ -74,7 +76,7 @@ export default function App() {
 
     return <Routes>
         <Route path="/your-social-recovery/deploy"
-               element={<DeployContract signer={signer} updateContract={updateContract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
+               element={<DeployContract signer={signer} updateContract={updateContract} contractNotDeployed={socialRecoveryNotDeployed} provider={provider}/>}/>
         <Route path="/your-social-recovery/guardians" element={<Guardians contract={contract} contractNotDeployed={socialRecoveryNotDeployed} address={address}/>}/>
         <Route path="/your-social-recovery/secret" element={<Secret contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-social-recovery/threshold" element={<Threshold contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
