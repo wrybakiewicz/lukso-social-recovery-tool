@@ -14,6 +14,10 @@ import {IconButton, Tooltip, Typography} from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import {keccak256} from "@ethersproject/keccak256";
 import {toUtf8Bytes} from "@ethersproject/strings";
+import UniversalProfile from "@lukso/lsp-smart-contracts/artifacts/UniversalProfile.json";
+import Web3 from "web3";
+import {ERC725} from "@erc725/erc725.js";
+import LSP6Schema from "@erc725/erc725.js/schemas/LSP6KeyManager.json";
 
 export default function DeployContract({signer, updateContract, contractNotDeployed}) {
 
@@ -60,13 +64,40 @@ export default function DeployContract({signer, updateContract, contractNotDeplo
     const deploy = async () => {
         setDeploying(true)
         const contractFactory = ContractFactory.fromSolidity(SocialRecovery, signer)
-        const address = await signer.getAddress()
-        const contract = await contractFactory.deploy(address, secretInputHash)
-        console.log(contract)
+        const contract = await contractFactory.deploy(secretInputHash)
+        const address = await signer.getAddress();
         await addSocialRecoveryContract(contract.deployTransaction.hash)
+        const contractAddress = await getContractAddress(address)
+        await addPermissions(contractAddress, address)
         console.log("Deployed social recovery contract")
-        return contract.address
     }
+
+    const getContractAddress = async (address) => {
+        const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/getrecoverycontractaddressforaddress?address=${address}`
+        return axios.get(url)
+            .then((response) => response.data.deploymentAddress)
+
+    }
+
+    const addPermissions = async (contractAddress, address) => {
+        const web3 = new Web3(window.ethereum);
+        const myUniversalProfile = new web3.eth.Contract(UniversalProfile.abi, address);
+
+        const keyManagerAddress = await myUniversalProfile.methods.owner().call();
+        console.log("keyManagerAddress", keyManagerAddress);
+        const erc725 = new ERC725(LSP6Schema);
+        const beneficiaryPermissions = erc725.encodePermissions({
+            ADDPERMISSIONS: true,
+            CHANGEPERMISSIONS: true
+        });
+        const data = erc725.encodeData({
+            keyName: "AddressPermissions:Permissions:<address>",
+            dynamicKeyParts: contractAddress,
+            value: beneficiaryPermissions,
+        });
+        await myUniversalProfile.methods.setData(data.keys[0], data.values[0]).send({from: address})
+    }
+
 
     const addSocialRecoveryContract = async (hash) => {
         const url = `https://f039pk1upb.execute-api.eu-central-1.amazonaws.com/api/addrecoverycontractaddress`

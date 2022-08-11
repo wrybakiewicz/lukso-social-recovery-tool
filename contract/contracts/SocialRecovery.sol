@@ -8,9 +8,9 @@ import {OwnableUnset} from "@erc725/smart-contracts/contracts/custom/OwnableUnse
 contract SocialRecovery is LSP11BasicSocialRecoveryCore {
     using EnumerableSet for EnumerableSet.AddressSet;
 
-    constructor(address _account, bytes32 _initialSecretHash) {
-        account = _account;
-        OwnableUnset._setOwner(_account);
+    constructor(bytes32 _initialSecretHash) {
+        account = msg.sender;
+        OwnableUnset._setOwner(msg.sender);
         _secretHash = _initialSecretHash;
         _guardiansThreshold = 1;
     }

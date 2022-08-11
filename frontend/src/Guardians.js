@@ -83,7 +83,10 @@ export default function Guardians({contract, contractNotDeployed, address}) {
     }, [contract])
 
     const tooltip = <div className={"guardiansInfo"}>
-        <Tooltip title={<Typography fontSize={20}>Guardians can vote to recover your account. You can recover your account with secret phase and minimum guardian votes equal to threshold or by all (minimum 2) guardians voting unanimously.</Typography>} className={"guardiansInfo"}>
+        <Tooltip
+            title={<Typography fontSize={20}>Guardians can vote to recover your account. You can recover your account
+                with secret phase and minimum guardian votes equal to threshold or by all (minimum 2) guardians voting
+                unanimously.</Typography>} className={"guardiansInfo"}>
             <IconButton>
                 <InfoIcon/>
             </IconButton>
@@ -92,7 +95,11 @@ export default function Guardians({contract, contractNotDeployed, address}) {
 
     const guardiansList = <div className={"listGuardians"}>
         <List>
-            {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian} showFullAddress={showFullAddress} isVerySmallScreen={isVerySmallScreen} updateGuardiansOnBackend={updateGuardiansOnBackend}/></div>)}
+            {guardians.map(guardian => <div key={guardian}><Guardian contract={contract} address={guardian}
+                                                                     showFullAddress={showFullAddress}
+                                                                     isVerySmallScreen={isVerySmallScreen}
+                                                                     updateGuardiansOnBackend={updateGuardiansOnBackend}/>
+            </div>)}
         </List>
     </div>
 
@@ -114,5 +121,6 @@ export default function Guardians({contract, contractNotDeployed, address}) {
             </Button>
         </InputGroup>
     </div>
-    return <YourSocialRecovery activeKey={1} content={content} contract={contract} contractNotDeployed={contractNotDeployed}/>
+    return <YourSocialRecovery activeKey={1} content={content} contract={contract}
+                               contractNotDeployed={contractNotDeployed}/>
 }
