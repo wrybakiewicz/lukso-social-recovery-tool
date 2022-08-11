@@ -10,6 +10,7 @@ import DeployContract from "./DeployContract";
 import axios from "axios";
 import './App.css'
 import YouAsAGuardian from "./YouAsAGuardian";
+import ViewRecovery from "./ViewRecovery";
 
 export default function App() {
 
@@ -81,6 +82,7 @@ export default function App() {
         <Route path="/your-social-recovery/secret" element={<Secret contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-social-recovery/threshold" element={<Threshold contract={contract} contractNotDeployed={socialRecoveryNotDeployed}/>}/>
         <Route path="/your-as-a-guardian" element={<YouAsAGuardian address={address} signer={signer}/>}/>
+        <Route path="/view-recovery/:address" element={<ViewRecovery signer={signer}/>}/>
         <Route path="*" element={<MainPage address={address} socialRecoveryNotDeployed={socialRecoveryNotDeployed}/>}/>
     </Routes>
 }
