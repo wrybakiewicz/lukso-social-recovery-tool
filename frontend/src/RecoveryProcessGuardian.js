@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import {ethers} from "ethers";
 import {toast} from "react-toastify";
 
-export default function YouAsAGuardianForAddressGuardian({process, contract, guardianDetails, address, updateVoteInParent}) {
+export default function RecoveryProcessGuardian({process, contract, guardianDetails, address, updateVoteInParent}) {
 
     const [isGuardianLoading, setIsGuardianLoading] = useState(true)
     const [voteInput, setVoteInput] = useState('')

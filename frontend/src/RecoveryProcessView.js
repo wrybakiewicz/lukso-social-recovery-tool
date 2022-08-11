@@ -1,4 +1,4 @@
-import YouAsAGuardianForAddressGuardian from "./YouAsAGuardianForAddressGuardian";
+import RecoveryProcessGuardian from "./RecoveryProcessGuardian";
 import {Accordion, InputGroup, OverlayTrigger, Table} from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -10,7 +10,7 @@ import {keccak256} from "@ethersproject/keccak256";
 import {toUtf8Bytes} from "@ethersproject/strings";
 import {toast} from "react-toastify";
 
-export default function YouAsAGuardianForAddressProcess({
+export default function RecoveryProcessView({
                                                             processWithIndex,
                                                             contract,
                                                             guardiansWithIndices,
@@ -151,7 +151,7 @@ export default function YouAsAGuardianForAddressProcess({
         </tr>
         </thead>
         <tbody>
-        {guardianDetailsList.map(guardianDetails => <YouAsAGuardianForAddressGuardian
+        {guardianDetailsList.map(guardianDetails => <RecoveryProcessGuardian
             key={guardianDetails.index}
             process={processWithIndex.process}
             contract={contract}

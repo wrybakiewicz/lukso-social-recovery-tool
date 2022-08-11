@@ -1,5 +1,5 @@
 import {Accordion} from "react-bootstrap";
-import YouAsAGuardianForAddressProcess from "./YouAsAGuardianForAddressProcess";
+import RecoveryProcessView from "./RecoveryProcessView";
 import StartNewRecoveryProcess from "./StartNewRecoveryProcess";
 import Button from "react-bootstrap/Button";
 import {useEffect, useState} from "react";
@@ -113,9 +113,9 @@ export default function RecoveryForAccount({contractAddress, signer}) {
 
     const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index}
                                                           onClick={(e) => processOnClick(e, processWithIndex.index)}>
-        <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract}
-                                         guardiansWithIndices={guardiansWithIndices} address={address}
-                                         threshold={threshold} currentSecretHash={secretHash} accountRecovered={initialize}/>
+        <RecoveryProcessView processWithIndex={processWithIndex} contract={contract}
+                             guardiansWithIndices={guardiansWithIndices} address={address}
+                             threshold={threshold} currentSecretHash={secretHash} accountRecovered={initialize}/>
     </Accordion.Item>
 
     const newRecoveryProcess = () => {
