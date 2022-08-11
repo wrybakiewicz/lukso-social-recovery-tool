@@ -24,13 +24,18 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
         query: '(min-width: 600px)'
     })
 
-    useEffect(_ => {
+    const initialize = () => {
+        console.log("Initializing account with guardians & processes")
         if (signer) {
             updateGuardians()
             updateRecoveryProcessesIds()
             updateThreshold()
             updateSecretHash()
         }
+    }
+
+    useEffect(_ => {
+        initialize()
     }, [])
 
     const updateThreshold = async () => {
@@ -122,7 +127,8 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     const process = (processWithIndex) => <Accordion.Item key={processWithIndex.index} eventKey={processWithIndex.index}
                                                           onClick={(e) => processOnClick(e, processWithIndex.index)}>
         <YouAsAGuardianForAddressProcess processWithIndex={processWithIndex} contract={contract}
-                                         guardiansWithIndices={guardiansWithIndices} address={address} threshold={threshold} currentSecretHash={secretHash}/>
+                                         guardiansWithIndices={guardiansWithIndices} address={address}
+                                         threshold={threshold} currentSecretHash={secretHash} accountRecovered={initialize}/>
     </Accordion.Item>
 
     const recoveryInfo = () => <div className={"recoveryInfo"}>
@@ -132,7 +138,7 @@ export default function YouAsAGuardianForAddress({recoveryAccount, signer, addre
     </div>
 
     const content = () => {
-        if(guardiansWithIndices && recoveryProcessIdsWithIndices && threshold && secretHash) {
+        if (guardiansWithIndices && recoveryProcessIdsWithIndices && threshold && secretHash) {
             return <div>
                 {recoveryInfo()}
                 <Accordion activeKey={activeKeys} alwaysOpen flush>

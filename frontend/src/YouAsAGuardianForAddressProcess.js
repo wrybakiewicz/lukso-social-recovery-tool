@@ -16,7 +16,8 @@ export default function YouAsAGuardianForAddressProcess({
                                                             guardiansWithIndices,
                                                             address,
                                                             threshold,
-                                                            currentSecretHash
+                                                            currentSecretHash,
+                                                            accountRecovered
                                                         }) {
 
     const [guardianDetailsList, setGuardianDetailsList] = useState([])
@@ -76,6 +77,8 @@ export default function YouAsAGuardianForAddressProcess({
             pending: 'Recovering account',
             success: 'Account recovered 👌',
             error: 'Account recover failed 🤯'
+        }).then(_ => {
+            accountRecovered()
         }).finally(_ => {
             setIsRecoveringWithoutSecret(false)
         });
@@ -88,9 +91,11 @@ export default function YouAsAGuardianForAddressProcess({
         const recoverAccountPromise = contract.recoverOwnership(processWithIndex.process, currentSecretInput, newSecretWithSecretInputHash)
         toast.promise(recoverAccountPromise, {
             pending: 'Recovering account',
-            success: 'Account recovered 👌',
+            success: '🎉 Account recovered 🎉',
             error: 'Account recover failed 🤯'
-        }).finally(_ => {
+        }).then(
+            accountRecovered()
+        ).finally(_ => {
             setIsRecoveringWithSecret(false)
         });
     }
