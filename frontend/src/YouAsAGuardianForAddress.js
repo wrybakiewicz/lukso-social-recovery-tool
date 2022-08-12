@@ -4,7 +4,7 @@ import {displayAddress} from './ResponsiveUtils'
 import './YouAsAGuardianForAddress.css'
 import RecoveryForAccount from "./RecoveryForAccount";
 
-export default function YouAsAGuardianForAddress({recoveryAccount, signer, address}) {
+export default function YouAsAGuardianForAddress({recoveryAccount, signer}) {
 
     const showFullAddress = useMediaQuery({
         query: '(min-width: 600px)'

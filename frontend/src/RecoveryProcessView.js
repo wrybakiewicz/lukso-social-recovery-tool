@@ -82,7 +82,7 @@ export default function RecoveryProcessView({
             success: 'Account recovered 👌',
             error: 'Account recover failed 🤯'
         }).then(async _ => {
-            await delay(1000);
+            await delay(3000);
             accountRecovered()
         }).finally(_ => {
             setIsRecoveringWithoutSecret(false)
@@ -99,7 +99,7 @@ export default function RecoveryProcessView({
             success: '🎉 Account recovered 🎉',
             error: 'Account recover failed 🤯'
         }).then(async _ => {
-            await delay(1000);
+            await delay(3000);
             accountRecovered()
             }
         ).finally(_ => {

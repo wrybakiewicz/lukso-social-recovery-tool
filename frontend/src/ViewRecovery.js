@@ -53,7 +53,7 @@ export default function ViewRecovery({signer}) {
         Connect your wallet
     </div>
 
-    const content = <div className={"viewRecoveryContent"}>
+    const content = () => <div className={"viewRecoveryContent"}>
         <h4 className={"viewRecoveryHeader"}>You are viewing details of social recovery for account</h4>
         <div className={"viewRecoveryAccount"}>
             <Card>
@@ -70,6 +70,6 @@ export default function ViewRecovery({signer}) {
     return <div className={"ViewRecovery"}>
         <Header/>
         <BackButton color={"left-color"}/>
-        {contractNotDeployed ? addressHasNoContract : contractAddress ? content : loading}
+        {contractNotDeployed ? addressHasNoContract : contractAddress ? content() : loading}
     </div>
 }
