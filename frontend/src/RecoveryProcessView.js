@@ -36,6 +36,10 @@ export default function RecoveryProcessView({
     const [isCurrentSecretValid, setIsCurrentSecretValid] = useState(false)
     const [currentSecretInput, setCurrentSecretInput] = useState('')
 
+    function delay(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+
     const updateNewSecretWithoutSecretInput = (secret) => {
         setNewSecretWithoutSecretInput(secret)
         const secretHash = calculateHash(secret)
@@ -77,7 +81,8 @@ export default function RecoveryProcessView({
             pending: 'Recovering account',
             success: 'Account recovered 👌',
             error: 'Account recover failed 🤯'
-        }).then(_ => {
+        }).then(async _ => {
+            await delay(1000);
             accountRecovered()
         }).finally(_ => {
             setIsRecoveringWithoutSecret(false)
@@ -93,8 +98,10 @@ export default function RecoveryProcessView({
             pending: 'Recovering account',
             success: '🎉 Account recovered 🎉',
             error: 'Account recover failed 🤯'
-        }).then(
+        }).then(async _ => {
+            await delay(1000);
             accountRecovered()
+            }
         ).finally(_ => {
             setIsRecoveringWithSecret(false)
         });
