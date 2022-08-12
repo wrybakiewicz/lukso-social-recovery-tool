@@ -36,10 +36,6 @@ export default function RecoveryProcessView({
     const [isCurrentSecretValid, setIsCurrentSecretValid] = useState(false)
     const [currentSecretInput, setCurrentSecretInput] = useState('')
 
-    function delay(time) {
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
-
     const updateNewSecretWithoutSecretInput = (secret) => {
         setNewSecretWithoutSecretInput(secret)
         const secretHash = calculateHash(secret)
