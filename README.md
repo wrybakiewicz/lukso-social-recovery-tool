@@ -4,7 +4,7 @@
 
 This project is submission for **Hackathon: LUKSO Build UP! #1**  Universal Profile Tools - Social Recovery Tool task.
 
-Live preview: [web3socialrecovery.com](https://www.web3socialrecovery.com/)
+Working dApp:  [web3socialrecovery.com](https://www.web3socialrecovery.com/)
 
 Done by **Wojciech Rybakiewicz** \
 wojtek.rybakiewicz@gmail.com
