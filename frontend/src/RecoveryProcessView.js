@@ -77,13 +77,15 @@ export default function RecoveryProcessView({
         setIsRecoveringWithoutSecret(true)
 
         const recoverAccountPromise = contract.recoverOwnershipWithoutSecret(processWithIndex.process, newSecretWithoutSecretInputHash)
+            .then(_ => {
+                accountRecovered()
+            }).finally(_ => {
+                setIsRecoveringWithoutSecret(false)
+            });
         toast.promise(recoverAccountPromise, {
             pending: 'Recovering account',
             success: 'Account recovered 👌',
             error: 'Account recover failed 🤯'
-        }).then(async _ => {
-            await delay(3000);
-            accountRecovered()
         }).finally(_ => {
             setIsRecoveringWithoutSecret(false)
         });
@@ -94,17 +96,16 @@ export default function RecoveryProcessView({
         setIsRecoveringWithSecret(true)
 
         const recoverAccountPromise = contract.recoverOwnership(processWithIndex.process, currentSecretInput, newSecretWithSecretInputHash)
+            .then(_ => {
+                accountRecovered()
+            }).finally(_ => {
+                setIsRecoveringWithSecret(false)
+            });
         toast.promise(recoverAccountPromise, {
             pending: 'Recovering account',
             success: '🎉 Account recovered 🎉',
             error: 'Account recover failed 🤯'
-        }).then(async _ => {
-            await delay(3000);
-            accountRecovered()
-            }
-        ).finally(_ => {
-            setIsRecoveringWithSecret(false)
-        });
+        })
     }
 
     const calculateHash = (input) => {
