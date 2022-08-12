@@ -15,17 +15,20 @@ contract SocialRecovery is LSP11BasicSocialRecoveryCore {
         _guardiansThreshold = 1;
     }
 
+    // add guardian + update threshold (details below)
     function addGuardianWithThresholdUpdate(address newGuardian) public onlyOwner {
         addGuardian(newGuardian);
         updateThreshold();
     }
 
+    // remove guardian + update threshold (details below)
     function removeGuardianWithThresholdUpdate(address guardian) public onlyOwner {
         require(_guardians.contains(guardian), "Provided address is not a guardian");
         _guardians.remove(guardian);
         updateThreshold();
     }
 
+    // recover without secret - required 100% voted from guardians and minimum 2 guardians
     function recoverOwnershipWithoutSecret(
         bytes32 recoverProcessId,
         bytes32 newHash
@@ -55,10 +58,17 @@ contract SocialRecovery is LSP11BasicSocialRecoveryCore {
         LSP6Utils.setDataViaKeyManager(keyManager, keys, values);
     }
 
+    // Expose secret hash to be available to get from frontend (it's already public in blockchain)
+    // used eg. when during recovery user provide new hash - to avoid new hash to be === old hash
     function getSecretHash() public view returns (bytes32) {
         return _secretHash;
     }
 
+    // Set threshold to half(if even) / more than half(if odd) of guardians number
+    // eg. 1 guardian -> 1 threshold
+    // eg. 2 guardian -> 1 threshold
+    // eg. 3 guardian -> 2 threshold
+    // eg. 4 guardian -> 2 threshold
     function updateThreshold() internal {
         uint256 guardiansCount = _guardians.length();
         uint256 newThreshold = guardiansCount % 2 == 0 ? guardiansCount / 2 : (guardiansCount + 1) / 2;
