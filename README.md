@@ -45,7 +45,7 @@ To interact with app user needs to have UP Browser Extension set up
 ## Technical Details
 
 ### Backend
-Backend contains of 4 AWS Lambdas that aggregates data for frontend app in PostgreSQL database.
+Backend contains of 4 AWS Lambdas that aggregates data(that can't be queried from contract) for frontend app in PostgreSQL database.
 - addRecoveryContractAddress - based on transaction hash adds social recovery contract address associated with user's account
 - getRecoveryContractAddressForAddress - return social recovery contract address for user address (to be able to interact on frontend with this contract)
 - changeGuardianToAddress - updates guardians list for user
