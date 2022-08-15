@@ -9,7 +9,7 @@ chai.use(chaiAsPromised);
 describe('add recovery contract address', function () {
     it('should add recovery contract address', async () => {
         const event = {
-            "body": '{"txHash": "0x50977eacc421d5f7b27b5dfc39854ffb8c12286ba49fb2e959b345b3c8f302fa"}'
+            "body": '{"txHash": "0x8892ca940bef07a3405c91c4766551331eb42b5eadffe0969cbc7593aa142b78"}'
         }
         let context;
 

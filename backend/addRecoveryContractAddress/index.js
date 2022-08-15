@@ -2,6 +2,8 @@ require("dotenv").config()
 const { Pool } = require('pg')
 const {ethers} = require("ethers");
 
+const contract = require("./contracts/SocialRecovery.json")
+
 const OWNERSHIP_TRANSFERED_METHOD_ID = "0x8be0079c"
 const CONTRACT_CREATED_METHOD_ID = "0x01c42bd7"
 
@@ -52,9 +54,18 @@ const getOwnerAddress = (transactionLogs) => {
 const getRecoveryContractAddressWithOwnerAddress = async (txHash) => {
     const provider = new ethers.providers.JsonRpcProvider("https://rpc.l16.lukso.network");
     const transaction = await provider.getTransactionReceipt(txHash)
+    const transactionData = await provider.getTransaction(txHash)
+    checkBytecode(transactionData.data)
     const contractAddress = getContractAddress(transaction.logs).toLowerCase()
     const ownerAddress = getOwnerAddress(transaction.logs).toLowerCase()
     return {contractAddress: contractAddress, ownerAddress: ownerAddress}
+}
+
+const checkBytecode = (data) => {
+    const bytecode = contract.bytecode.substring(2)
+    if(!data.includes(bytecode)) {
+        throw Error("Contract has different bytecode than SocialRecovery contract !")
+    }
 }
 
 const buildResponse = (statusCode, bodyJson) => {
