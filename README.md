@@ -24,6 +24,8 @@ Solution allows:
 
 Project uses LSP11BasicSocialRecovery standard extended by features described in **Additions to LSP11BasicSocialRecovery standard** section.
 
+![](assets/screenshot.png?raw=true)
+
 ## Project contains:
 - Frontend app
 - Smart Contract based on LSP11BasicSocialRecovery standard
