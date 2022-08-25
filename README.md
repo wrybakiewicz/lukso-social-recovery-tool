@@ -9,12 +9,27 @@ Working dApp:  [web3socialrecovery.com](https://www.web3socialrecovery.com/)
 Done by **Wojciech Rybakiewicz** \
 wojtek.rybakiewicz@gmail.com
 
-#### Project contains:
+## Short description
+
+Web3 Social Recovery provides Social Recovery Tool in case user lose access to his/her account. 
+
+Solution allows:
+- deploying **Web3 Social Recovery** contracts
+- changing its parameters (like threshold - minimum number of guardians to recover account, secret - phase needed to recover account)
+- adding and removing guardians
+- viewing users guarded accounts and their recovery processes
+- searching for social recovery contract for any account
+- starting new recovering processes and participating in existing processes
+- recovering account with and without secret (difference described below)
+
+Project uses LSP11BasicSocialRecovery standard extended by features described in **Additions to LSP11BasicSocialRecovery standard** section.
+
+## Project contains:
 - Frontend app
 - Smart Contract based on LSP11BasicSocialRecovery standard
 - Backend aggregating data for Frontend app
 
-#### Description of frontend app
+## Description of Dapp
 To interact with app user needs to have UP Browser Extension set up 
 
 **Your Social Recovery** section - contains all features in the area of user's account social recovery
@@ -35,7 +50,7 @@ To interact with app user needs to have UP Browser Extension set up
 **View recovery** section- contains all features in the area of provided account social recovery
 - contains similar features to **You as a Guardian** section but for provided address with slightly modified view
 
-#### Additions to LSP11BasicSocialRecovery standard
+### Additions to LSP11BasicSocialRecovery standard
 - adding recoverOwnershipWithoutSecret function - that gives way to recover when user forgot it's secret. It needs 100% votes for one address from guardians and there must be >= 2 guardians 
 - adding addGuardianWithThresholdUpdate and removeGuardianWithThresholdUpdate that add/remove guardians and change threshold to half of guardians number(if even) or to half + 1 of guardians number(if odd) - done for simplifying UX & save user from corner cases like 10 guardians and 1 threshold. Threshold can be overridden afterwards
 - exposing secret hash to use on frontend (secret hash is already public on blockchain)
