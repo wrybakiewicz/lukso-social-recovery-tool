@@ -73,3 +73,8 @@ Frontend is React app that connects social recovery smart contract and uses back
 
 ### Contract
 Contains SocialRecovery contract which is based on LSP11BasicSocialRecoveryCore. Additions are described above.
+
+### Screens screens
+![](assets/screen1.png?raw=true)
+![](assets/screen2.png?raw=true)
+![](assets/screen3.png?raw=true)
